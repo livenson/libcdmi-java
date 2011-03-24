@@ -1,0 +1,7 @@
+CDMI Java client library.
+
+1. Clone git.
+2. mvn install
+
+Example of usage:
+...
