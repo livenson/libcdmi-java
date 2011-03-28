@@ -40,22 +40,14 @@ public class BlobOperations {
 		httpput.setHeader("Accept", CDMIContentType.CDMI_DATA);
 		httpput.setHeader("X-CDMI-Specification-Version",
 				CDMIContentType.CDMI_SPEC_VERSION);
-
+		
 		BlobCreateRequest create = new BlobCreateRequest();
 		create.value = Utils.getContents(new File(local.getPath()));
 		create.mimetype = parameters.get("mimetype") != null ? (String) parameters
 				.get("mimetype")
 				: "text/plain";
-
+		// TODO: remove MetadataField from request DTOs. Client should not know about these objects!
 		create.metadata = (MetadataField) parameters.get("metadata");
-		create.domainURI = (String) parameters.get("domainURI");
-		create.copy = (String) parameters.get("copy");
-		create.deserialize = (String) parameters.get("deserialize");
-		create.serialize = (String) parameters.get("serialize");
-		create.move = (String) parameters.get("move");
-		create.objectID = (String) parameters.get("objectID");
-		create.objectURI = (String) parameters.get("objectURI");
-		create.reference = (String) parameters.get("reference");
 
 		Gson gson = new Gson();
 		StringEntity entity = new StringEntity(gson.toJson(create));

@@ -46,9 +46,10 @@ public class CDMIConnection {
 		// TODO: treat update and create differently
 		return blobProxy.create(new URI(localFNM), remoteFNM, parameters);
 	}
-	
-	public void delete(String remoteFNM) throws ClientProtocolException, IOException, CDMIOperationException {
-		blobProxy.delete(remoteFNM);		
+
+	public void delete(String remoteFNM) throws ClientProtocolException,
+			IOException, CDMIOperationException {
+		blobProxy.delete(remoteFNM);
 	}
 
 	public File readBlob(String remoteFNM, String localFNM)
@@ -59,5 +60,15 @@ public class CDMIConnection {
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 		return containerProxy.getChildren(remoteContainer);
+	}
+
+	public int createContainer(String remoteContainer, Map parameters)
+			throws ClientProtocolException, IOException, CDMIOperationException {
+		return containerProxy.create(remoteContainer, parameters);
+	}
+
+	public void deleteContainer(String remoteContainer)
+			throws ClientProtocolException, IOException, CDMIOperationException {
+		containerProxy.delete(remoteContainer);
 	}
 }

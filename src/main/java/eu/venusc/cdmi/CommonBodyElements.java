@@ -8,12 +8,12 @@ class CommonBodyElements {
 	String domainURI;
 	String mimetype;
 	MetadataField metadata;
-	
+
 	public CommonBodyElements() {
 	}
 }
 
-class BlobCreateRequest extends CommonBodyElements{
+class BlobCreateRequest extends CommonBodyElements {
 
 	String deserialize;
 	String serialize;
@@ -32,7 +32,7 @@ class BlobCreateResponse extends CommonBodyElements {
 	String capabilitiesURI;
 	String completionStatus;
 	String percentComplete;
-	
+
 	public BlobCreateResponse() {
 
 	}
@@ -52,8 +52,8 @@ class BlobReadResponse extends CommonBodyElements {
 
 }
 
-class BlobUpdateRequest extends CommonBodyElements{
-	
+class BlobUpdateRequest extends CommonBodyElements {
+
 	String value;
 
 	public BlobUpdateRequest() {
@@ -75,8 +75,13 @@ class ContainerReadRequest extends CommonBodyElements {
 	}
 }
 
+class ContainerCreateRequest extends CommonBodyElements {
+	public ContainerCreateRequest() {
+	}
+}
+
 class MetadataField {
-	
+
 	int cdmi_size;
 	String cdmi_mtime;
 	String cdmi_atime;
@@ -85,4 +90,3 @@ class MetadataField {
 	public MetadataField() {
 	}
 }
-
