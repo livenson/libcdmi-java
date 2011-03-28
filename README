@@ -1,7 +1,11 @@
 CDMI Java client library.
 
-1. Clone git.
+1. git clone git@github.com:livenson/libcdmi-java.git
 2. mvn install
 
-Example of usage:
-...
+This will produce a jar file called: libcdmi-1.0.jar in target folder.
+
+There is a sample client you can use: CDMIClient. In order to use this client you need to
+create two sample files and a container in the server and define the values in the client
+and then you can simply run the client against a CDMI server (endpoint).
+
