@@ -14,19 +14,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class CDMIConnection {
 
-	private Credentials creds;
-	private URL endpoint;
 	private DefaultHttpClient httpclient;
 
 	BlobOperations blobProxy;
 	ContainerOperations containerProxy;
 
 	public CDMIConnection(Credentials creds, URL endpoint) {
-		this.creds = creds;
-		this.endpoint = endpoint;
 		httpclient = new DefaultHttpClient();
 		httpclient.getCredentialsProvider().setCredentials(
 				new AuthScope(endpoint.getHost(), endpoint.getPort()), creds);
+		
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
 		this.containerProxy = new ContainerOperations(endpoint, httpclient);
 	}
