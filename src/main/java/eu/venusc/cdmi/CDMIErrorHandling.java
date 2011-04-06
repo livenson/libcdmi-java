@@ -21,6 +21,6 @@ public class CDMIErrorHandling {
 	public static void checkResponseCode(String operationType, int code) throws CDMIOperationException {
 		Object error_message = messages.get(operationType + code);
 		if (error_message != null)
-			throw new CDMIOperationException((String) error_message, code);	
-	}
+			throw new CDMIOperationException((String) error_message, code);
+	}	
 }

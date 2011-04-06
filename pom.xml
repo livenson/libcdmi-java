@@ -39,12 +39,13 @@
       <version>4.1.1</version>
       <scope>compile</scope>
    </dependency>
-      <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>1.6</version>
-      <scope>compile</scope>
-    </dependency>
+
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1</version>
+</dependency>
+
   </dependencies>
   
    <repositories>
@@ -57,17 +58,6 @@
       <id>m2.dev.java.net</id>
       <url>http://download.java.net/maven/2</url>
       <layout>default</layout>
-    </repository>
-
-  <repository>
-      <id>gson</id>
-      <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
     </repository>
 
   </repositories>
