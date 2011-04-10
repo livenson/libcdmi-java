@@ -23,27 +23,11 @@ public class ContainerOperations {
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
 
-	/**
-	 * 
-	 * @param endpoint
-	 * @param httpclient
-	 */
-
 	public ContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
-
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
 
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @param parameters
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 */
 	public HttpResponse create(String remoteContainer, Map parameters)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -63,14 +47,6 @@ public class ContainerOperations {
 		return httpclient.execute(httpput);
 	}
 
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 */
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -84,14 +60,6 @@ public class ContainerOperations {
 		return httpclient.execute(httpdelete);
 	}
 
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @param fields
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
 		String path = endpoint.toString() + "/" + remoteContainer + "/?";
@@ -109,15 +77,6 @@ public class ContainerOperations {
 		return httpclient.execute(httpget);
 	}
 
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 * @throws ParseException
-	 */
 	public Object[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {

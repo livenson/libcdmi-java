@@ -18,16 +18,10 @@ public class CDMIConnection {
 	private DefaultHttpClient httpclient;
 
 	public BlobOperations blobProxy;
-	public  ContainerOperations containerProxy;
+	public ContainerOperations containerProxy;
 
-	/**
-	 * 
-	 * @param creds
-	 * @param endpoint
-	 */
 	public CDMIConnection(Credentials creds, URL endpoint) {
-
-
+		// default connection manager is bad for multiple requests
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));

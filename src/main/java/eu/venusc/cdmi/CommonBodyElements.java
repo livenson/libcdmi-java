@@ -21,7 +21,6 @@ class CommonBodyElements implements JSONStreamAware {
 	public CommonBodyElements() {
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 	}
 }
@@ -39,7 +38,6 @@ class BlobCreateRequest extends CommonBodyElements {
 
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -79,7 +77,6 @@ class BlobCreateResponse extends CommonBodyElements {
 
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -117,7 +114,6 @@ class BlobReadResponse extends CommonBodyElements {
 
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -160,7 +156,6 @@ class ContainerReadRequest extends CommonBodyElements {
 	public ContainerReadRequest() {
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 
@@ -229,7 +224,6 @@ class MetadataField implements JSONAware {
 	public MetadataField() {
 	}
 
-	@Override
 	public String toJSONString() {
 		JSONObject obj = new JSONObject();
 		obj.put("cdmi_size", cdmi_size);

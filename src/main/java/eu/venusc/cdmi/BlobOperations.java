@@ -17,33 +17,16 @@ public class BlobOperations {
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
-	private Map parameters;
-	
-	/**
-	 * 
-	 * @param endpoint
-	 * @param httpclient
-	 */
+
 	public BlobOperations(URL endpoint, DefaultHttpClient httpclient) {
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
-		this.parameters = parameters;
 	}
-	
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @param remoteFNM
-	 * @param value
-	 * @param parameters
-	 * @return
-	 * @throws IOException
-	 */
-	public HttpResponse create(String remoteContainer, String remoteFNM,
-			byte[] value, Map parameters) throws IOException {
 
-		HttpPut httpput = new HttpPut(endpoint + "/" + remoteContainer + "/"
-				+ remoteFNM);
+	public HttpResponse create(String remoteFNM, byte[] value, Map parameters)
+			throws IOException {
+
+		HttpPut httpput = new HttpPut(endpoint + "/" + remoteFNM);
 		httpput.setHeader("Content-Type", CDMIContentType.CDMI_DATA);
 		httpput.setHeader("Accept", CDMIContentType.CDMI_DATA);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -52,7 +35,8 @@ public class BlobOperations {
 		BlobCreateRequest createObj = new BlobCreateRequest();
 
 		createObj.mimetype = parameters.get("mimetype") != null ? (String) parameters
-				.get("mimetype") : "text/plain";
+				.get("mimetype")
+				: "text/plain";
 
 		if (!createObj.mimetype.equals("text/plain")) {
 			Base64 encoder = new Base64();
@@ -68,49 +52,28 @@ public class BlobOperations {
 		StringEntity entity = new StringEntity(out.toString());
 		httpput.setEntity(entity);
 		return httpclient.execute(httpput);
-
 	}
-	
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @param remoteFNM
-	 * @return
-	 * @throws IOException
-	 */
-	public HttpResponse delete(String remoteContainer, String remoteFNM)
-			throws IOException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteContainer
-				+ "/" + remoteFNM);
+	public HttpResponse delete(String remoteFNM) throws IOException {
+
+		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteFNM);
 		httpdelete.setHeader("Content-Type", CDMIContentType.CDMI_DATA);
 		httpdelete.setHeader("Accept", CDMIContentType.CDMI_DATA);
 		httpdelete.setHeader("X-CDMI-Specification-Version",
 				CDMIContentType.CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
-
 	}
-	
-	/**
-	 * 
-	 * @param remoteContainer
-	 * @param remoteFNM
-	 * @return
-	 * @throws IOException
-	 */
-	public HttpResponse read(String remoteContainer, String remoteFNM)
-			throws IOException {
 
-		HttpGet httpget = new HttpGet(endpoint + "/" + remoteContainer + "/"
-				+ remoteFNM);
+	public HttpResponse read(String remoteFNM) throws IOException {
+
+		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);
 
 		httpget.setHeader("Accept", CDMIContentType.CDMI_DATA);
 		httpget.setHeader("Content-Type", CDMIContentType.CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",
 				CDMIContentType.CDMI_SPEC_VERSION);
 		return httpclient.execute(httpget);
-
 	}
 
 }
