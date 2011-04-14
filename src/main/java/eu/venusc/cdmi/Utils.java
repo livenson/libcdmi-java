@@ -1,17 +1,10 @@
 package eu.venusc.cdmi;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -164,8 +157,7 @@ public class Utils {
 		try {
 			Map json = (Map) parser.parse(is, containerFactory);
 			String content = json.get("value").toString();
-			Base64 decoder = new Base64();
-			return new String(decoder.decodeBase64(content));
+			return new String(Base64.decodeBase64(content));
 		} catch (ParseException pe) {
 			System.out.println(pe);
 		}

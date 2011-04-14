@@ -14,8 +14,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 public class ContainerOperations {
@@ -65,7 +63,7 @@ public class ContainerOperations {
 		String path = endpoint.toString() + "/" + remoteContainer + "/?";
 
 		for (String f : fields) {
-			path = path + f;
+			path = path + ";" + f;
 		}
 
 		HttpGet httpget = new HttpGet(path);
@@ -77,7 +75,7 @@ public class ContainerOperations {
 		return httpclient.execute(httpget);
 	}
 
-	public Object[] getChildren(String remoteContainer)
+	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
 		String path = endpoint.toString();
@@ -86,7 +84,7 @@ public class ContainerOperations {
 		List<String> children = new ArrayList<String>();
 		children.add("children");
 		HttpResponse hr = read(remoteContainer, children);
-		return Utils.getElementArrary(hr, "children");
+		return (String[]) Utils.getElementArrary(hr, "children");
 
 	}
 

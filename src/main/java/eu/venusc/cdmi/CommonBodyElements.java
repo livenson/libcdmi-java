@@ -51,7 +51,7 @@ class BlobCreateRequest extends CommonBodyElements {
 		if (mimetype != null)
 			obj.put("mimetype", mimetype);
 		if (metadata != null)
-			obj.put("metadata", metadata);
+			obj.put("metadata", metadata); 
 		if (deserialize != null)
 			obj.put("deserialize", deserialize);
 		if (serialize != null)
