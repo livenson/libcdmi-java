@@ -17,11 +17,17 @@ public class CDMIConnection {
 
 	private DefaultHttpClient httpclient;
 
-	public BlobOperations blobProxy;
-	public ContainerOperations containerProxy;
+	private BlobOperations blobProxy;
+	private ContainerOperations containerProxy;
 
+	/**
+	 * 
+	 * @param creds
+	 * @param endpoint
+	 */
 	public CDMIConnection(Credentials creds, URL endpoint) {
-		// default connection manager is bad for multiple requests
+
+
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));
@@ -41,6 +47,30 @@ public class CDMIConnection {
 
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
 		this.containerProxy = new ContainerOperations(endpoint, httpclient);
+	}
+
+	public DefaultHttpClient getHttpclient() {
+		return httpclient;
+	}
+
+	public void setHttpclient(DefaultHttpClient httpclient) {
+		this.httpclient = httpclient;
+	}
+
+	public BlobOperations getBlobProxy() {
+		return blobProxy;
+	}
+
+	public void setBlobProxy(BlobOperations blobProxy) {
+		this.blobProxy = blobProxy;
+	}
+
+	public ContainerOperations getContainerProxy() {
+		return containerProxy;
+	}
+
+	public void setContainerProxy(ContainerOperations containerProxy) {
+		this.containerProxy = containerProxy;
 	}
 
 }

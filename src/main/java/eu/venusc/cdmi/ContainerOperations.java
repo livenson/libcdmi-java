@@ -14,6 +14,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 public class ContainerOperations {
@@ -21,11 +23,27 @@ public class ContainerOperations {
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
 
+	/**
+	 * 
+	 * @param endpoint
+	 * @param httpclient
+	 */
+
 	public ContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
+
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
 
+	/**
+	 * 
+	 * @param remoteContainer
+	 * @param parameters
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws CDMIOperationException
+	 */
 	public HttpResponse create(String remoteContainer, Map parameters)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -45,6 +63,14 @@ public class ContainerOperations {
 		return httpclient.execute(httpput);
 	}
 
+	/**
+	 * 
+	 * @param remoteContainer
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws CDMIOperationException
+	 */
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -58,12 +84,20 @@ public class ContainerOperations {
 		return httpclient.execute(httpdelete);
 	}
 
+	/**
+	 * 
+	 * @param remoteContainer
+	 * @param fields
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
 		String path = endpoint.toString() + "/" + remoteContainer + "/?";
 
 		for (String f : fields) {
-			path = path + ";" + f;
+			path = path + f;
 		}
 
 		HttpGet httpget = new HttpGet(path);
@@ -75,7 +109,16 @@ public class ContainerOperations {
 		return httpclient.execute(httpget);
 	}
 
-	public String[] getChildren(String remoteContainer)
+	/**
+	 * 
+	 * @param remoteContainer
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws CDMIOperationException
+	 * @throws ParseException
+	 */
+	public Object[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
 		String path = endpoint.toString();
@@ -84,7 +127,7 @@ public class ContainerOperations {
 		List<String> children = new ArrayList<String>();
 		children.add("children");
 		HttpResponse hr = read(remoteContainer, children);
-		return (String[]) Utils.getElementArrary(hr, "children");
+		return Utils.getElementArrary(hr, "children");
 
 	}
 

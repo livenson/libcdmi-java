@@ -21,6 +21,7 @@ class CommonBodyElements implements JSONStreamAware {
 	public CommonBodyElements() {
 	}
 
+	@Override
 	public void writeJSONString(Writer out) throws IOException {
 	}
 }
@@ -38,6 +39,7 @@ class BlobCreateRequest extends CommonBodyElements {
 
 	}
 
+	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -51,7 +53,7 @@ class BlobCreateRequest extends CommonBodyElements {
 		if (mimetype != null)
 			obj.put("mimetype", mimetype);
 		if (metadata != null)
-			obj.put("metadata", metadata); 
+			obj.put("metadata", metadata);
 		if (deserialize != null)
 			obj.put("deserialize", deserialize);
 		if (serialize != null)
@@ -77,6 +79,7 @@ class BlobCreateResponse extends CommonBodyElements {
 
 	}
 
+	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -114,6 +117,7 @@ class BlobReadResponse extends CommonBodyElements {
 
 	}
 
+	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -156,6 +160,7 @@ class ContainerReadRequest extends CommonBodyElements {
 	public ContainerReadRequest() {
 	}
 
+	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 
@@ -224,6 +229,7 @@ class MetadataField implements JSONAware {
 	public MetadataField() {
 	}
 
+	@Override
 	public String toJSONString() {
 		JSONObject obj = new JSONObject();
 		obj.put("cdmi_size", cdmi_size);

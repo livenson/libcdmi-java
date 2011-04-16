@@ -1,10 +1,17 @@
 package eu.venusc.cdmi;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +35,7 @@ public class Utils {
 	 */
 	public static byte[] getBytesFromFile(File file) throws IOException {
 		InputStream is = new FileInputStream(file);
-
+		
 		// Get the size of the file
 		long length = file.length();
 
@@ -92,8 +99,12 @@ public class Utils {
 			Map json = (Map) parser.parse(is, containerFactory);
 			LinkedList theList = (LinkedList) json.get(elementName);
 			return theList.toArray();
+					
 		} catch (ParseException pe) {
-			System.out.println(pe);
+			System.err.println(pe.getMessage());
+		} finally {
+			stream.close();
+			is.close();	
 		}
 		return null;
 	}
@@ -126,7 +137,10 @@ public class Utils {
 			Map json = (Map) parser.parse(is, containerFactory);
 			return json.get(elementName);
 		} catch (ParseException pe) {
-			System.out.println(pe);
+			System.err.println(pe.getMessage());
+		} finally {
+			stream.close();
+			is.close();	
 		}
 		return null;
 	}
@@ -157,10 +171,50 @@ public class Utils {
 		try {
 			Map json = (Map) parser.parse(is, containerFactory);
 			String content = json.get("value").toString();
-			return new String(Base64.decodeBase64(content));
+			Base64 decoder = new Base64();
+			System.out.println(new String (decoder.decodeBase64(content)));
+			return decoder.decodeBase64(content);
 		} catch (ParseException pe) {
-			System.out.println(pe);
+			System.err.println(pe.getMessage());
+		} finally {
+			stream.close();
+			is.close();	
 		}
 		return null;
 	}
+	
+	/**
+	 * This method returns the content of a text object
+	 * 
+	 * @param response
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
+	public static String getTextContent(HttpResponse response)
+			throws IllegalStateException, IOException {
+		JSONParser parser = new JSONParser();
+		InputStream stream = response.getEntity().getContent();
+		InputStreamReader is = new InputStreamReader(stream);
+
+		ContainerFactory containerFactory = new ContainerFactory() {
+			public List creatArrayContainer() {
+				return new LinkedList();
+			}
+
+			public Map createObjectContainer() {
+				return new LinkedHashMap();
+			}
+		};
+		try {
+			Map json = (Map) parser.parse(is, containerFactory);
+			return json.get("value").toString();
+		} catch (ParseException pe) {
+			System.err.println(pe.getMessage());
+		} finally {
+			stream.close();
+			is.close();	
+		}
+		return null;
+	}	
 }
