@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ContainerOperationsTest extends CDMIConnectionTest {
+public class ContainerOperationsTest extends CDMIConnectionTest implements CDMIResponseStatus{
 
 	ContainerOperations cops = null;
 	static String containerName = null;
@@ -44,7 +44,7 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 
 				HttpResponse response = cops.delete((String) children[i]);
 				int responseCode = response.getStatusLine().getStatusCode();
-				if (responseCode != 204) 
+				if (responseCode != REQUEST_DELETED) 
 					fail("Container " + containerName + " could not be cleanup");
 			}
 
@@ -77,7 +77,7 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 		try {
 			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + containerName + "/");
 
 		} catch (CDMIOperationException e) {
@@ -111,21 +111,21 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 			response = cops.create(containerName + 0 + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + containerName + "/");
 
 			set.add(containerName + 0 + "/");
 
 			response = cops.create(containerName + 1, parameters);
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + containerName + "/");
 
 			set.add(containerName + 1 + "/");
 
 			response = cops.create(containerName + 2, parameters);
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + containerName + "/");
 
 			set.add(containerName + 2 + "/");
@@ -176,12 +176,12 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create the container: " + containerName + "/");
 			// delete the container
 			response = cops.delete(containerName + "/");
 			responseCode = response.getStatusLine().getStatusCode();
-			assertEquals("Container deleted: ", 204, responseCode);
+			assertEquals("Container deleted: ", REQUEST_DELETED, responseCode);
 
 		} catch (CDMIOperationException e) {
 			System.err.println(e.getMessage());

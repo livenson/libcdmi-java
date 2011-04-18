@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
-public class ContainerOperations {
+public class ContainerOperations implements CDMIContentType{
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
@@ -49,10 +49,10 @@ public class ContainerOperations {
 
 		HttpPut httpput = new HttpPut(endpoint + "/" + remoteContainer);
 
-		httpput.setHeader("Content-Type", CDMIContentType.CDMI_CONTAINER);
-		httpput.setHeader("Accept", CDMIContentType.CDMI_CONTAINER);
+		httpput.setHeader("Content-Type", CDMI_CONTAINER);
+		httpput.setHeader("Accept", CDMI_CONTAINER);
 		httpput.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 
 		ContainerCreateRequest createObj = new ContainerCreateRequest();
 		StringWriter out = new StringWriter();
@@ -76,10 +76,10 @@ public class ContainerOperations {
 
 		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteContainer);
 
-		httpdelete.setHeader("Content-Type", CDMIContentType.CDMI_CONTAINER);
-		httpdelete.setHeader("Accept", CDMIContentType.CDMI_CONTAINER);
+		httpdelete.setHeader("Content-Type", CDMI_CONTAINER);
+		httpdelete.setHeader("Accept", CDMI_CONTAINER);
 		httpdelete.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
 	}
@@ -101,10 +101,10 @@ public class ContainerOperations {
 		}
 
 		HttpGet httpget = new HttpGet(path);
-		httpget.setHeader("Content-Type", CDMIContentType.CDMI_CONTAINER);
-		httpget.setHeader("Accept", CDMIContentType.CDMI_CONTAINER);
+		httpget.setHeader("Content-Type", CDMI_CONTAINER);
+		httpget.setHeader("Accept", CDMI_CONTAINER);
 		httpget.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpget);
 	}

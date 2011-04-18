@@ -13,7 +13,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class BlobOperations {
+public class BlobOperations implements CDMIContentType{
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
@@ -40,10 +40,10 @@ public class BlobOperations {
 			throws IOException {
 
 		HttpPut httpput = new HttpPut(endpoint + "/" + remoteFNM);
-		httpput.setHeader("Content-Type", CDMIContentType.CDMI_DATA);
-		httpput.setHeader("Accept", CDMIContentType.CDMI_DATA);
+		httpput.setHeader("Content-Type", CDMI_DATA);
+		httpput.setHeader("Accept", CDMI_DATA);
 		httpput.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 
 		BlobCreateRequest createObj = new BlobCreateRequest();
 
@@ -76,10 +76,10 @@ public class BlobOperations {
 	public HttpResponse delete(String remoteFNM) throws IOException {
 
 		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteFNM);
-		httpdelete.setHeader("Content-Type", CDMIContentType.CDMI_DATA);
-		httpdelete.setHeader("Accept", CDMIContentType.CDMI_DATA);
+		httpdelete.setHeader("Content-Type", CDMI_DATA);
+		httpdelete.setHeader("Accept", CDMI_DATA);
 		httpdelete.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
 	}
@@ -94,10 +94,10 @@ public class BlobOperations {
 
 		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);
 
-		httpget.setHeader("Accept", CDMIContentType.CDMI_DATA);
-		httpget.setHeader("Content-Type", CDMIContentType.CDMI_OBJECT);
+		httpget.setHeader("Accept", CDMI_DATA);
+		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",
-				CDMIContentType.CDMI_SPEC_VERSION);
+				CDMI_SPEC_VERSION);
 		return httpclient.execute(httpget);
 	}
 

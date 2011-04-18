@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BlobOperationsTest extends CDMIConnectionTest {
+public class BlobOperationsTest extends CDMIConnectionTest implements CDMIResponseStatus {
 
 	ContainerOperations cops = null;
 	BlobOperations bops = null;
@@ -53,9 +53,9 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 
 			response = bops.delete(containerName + "/" + objectName);
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 204) {
+			if (responseCode != REQUEST_DELETED) {
 				/* when container is removed */
-				if (responseCode == 404)
+				if (responseCode == REQUEST_NOT_FOUND)
 					;
 				else
 					fail("Could not clean the object: " + containerName + "/"
@@ -65,7 +65,7 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			// delete the container
 			response = cops.delete(containerName + "/");
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 204)
+			if (responseCode != REQUEST_DELETED)
 				fail("Could not clean the container: " + containerName + "/");
 
 		} catch (CDMIOperationException e) {
@@ -103,13 +103,13 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			response = cops.create(containerName, parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create container: " + responseCode);
 
 			response = bops.create(containerName + "/" + objectName, Utils
 					.getBytesFromFile(tmpFile), parameters);
 			responseCode = response.getStatusLine().getStatusCode();
-			assertEquals("Object created: ", 201, responseCode);
+			assertEquals("Object created: ", REQUEST_CREATED, responseCode);
 		} catch (CDMIOperationException e) {
 			System.err.println(e.getMessage());
 
@@ -142,7 +142,7 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create container: " + containerName + "/");
 
 			response = bops.create(containerName + "/" + objectName, Utils
@@ -150,7 +150,7 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create blob object " + containerName + "/"
 						+ objectName);
 
@@ -202,20 +202,20 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			 */
 			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create container: " + containerName + "/");
 
 			response = bops.create(containerName + "/" + objectName, Utils
 					.getBytesFromFile(tmpFile), parameters);
 
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 201)
+			if (responseCode != REQUEST_CREATED)
 				fail("Could not create blob object " + containerName + "/"
 						+ objectName);
 
 			response = bops.delete(containerName + "/" + objectName);
 			responseCode = response.getStatusLine().getStatusCode();
-			assertEquals("Object deleted: ", 204, responseCode);
+			assertEquals("Object deleted: ", REQUEST_DELETED, responseCode);
 			
 		} catch (ClientProtocolException e) {
 			System.err.println(e.getMessage());
