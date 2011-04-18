@@ -20,15 +20,13 @@ public class CDMIConnection {
 	private ContainerOperations containerProxy = null;
 
 	/**
-	 * 
+	 * CDMIConnection constructor.
 	 * @param creds
 	 * @param endpoint
 	 */
 	public CDMIConnection(Credentials creds, URL endpoint) {
 
-		/**
-		 * Create and manage pool of connections
-		 */
+		/** Create and manage pool of connections. */
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));

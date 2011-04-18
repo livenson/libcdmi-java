@@ -27,7 +27,7 @@ public interface CDMIResponseStatus {
 	public static final int REQUEST_NOT_FOUND = 404;
 	/**
 	 * The server is unable to provide the object in the content-type specified
-	 * in the Accept header.406 */
+	 * in the Accept header. 406 */
 	public static final int REQUEST_NOT_ACCEPTABLE = 406;
 	/** The request containes a name which already exists. 409*/
 	public static final int REQUEST_NAME_CONFLICT = 409;

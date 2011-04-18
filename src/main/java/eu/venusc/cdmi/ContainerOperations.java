@@ -14,8 +14,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 public class ContainerOperations implements CDMIContentType{
@@ -24,7 +22,7 @@ public class ContainerOperations implements CDMIContentType{
 	private DefaultHttpClient httpclient;
 
 	/**
-	 * 
+	 * ContainerOperations constructor.
 	 * @param endpoint
 	 * @param httpclient
 	 */
@@ -36,15 +34,15 @@ public class ContainerOperations implements CDMIContentType{
 	}
 
 	/**
-	 * To create a container
+	 * To create a CDMI container.
 	 * @param remoteContainer
 	 * @param parameters
-	 * @return
+	 * @return HttpResponse
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 * @throws CDMIOperationException
 	 */
-	public HttpResponse create(String remoteContainer, Map parameters)
+	public HttpResponse create(String remoteContainer, Map <String, Object> parameters)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
 		HttpPut httpput = new HttpPut(endpoint + "/" + remoteContainer);
@@ -64,9 +62,9 @@ public class ContainerOperations implements CDMIContentType{
 	}
 
 	/**
-	 * To delete a container
+	 * To delete a CDMI container.
 	 * @param remoteContainer
-	 * @return
+	 * @return HttpResponse
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 * @throws CDMIOperationException
@@ -85,10 +83,10 @@ public class ContainerOperations implements CDMIContentType{
 	}
 
 	/**
-	 * To read container information
+	 * To read a CDMI container information.
 	 * @param remoteContainer
 	 * @param fields
-	 * @return
+	 * @return HttpResponse
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
@@ -110,9 +108,9 @@ public class ContainerOperations implements CDMIContentType{
 	}
 
 	/**
-	 * To get childrens of a specific container
+	 * To get children of a specific CDMI container.
 	 * @param remoteContainer
-	 * @return
+	 * @return Object[]
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 * @throws CDMIOperationException

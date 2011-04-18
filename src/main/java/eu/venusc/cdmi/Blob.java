@@ -9,8 +9,7 @@ public class Blob{
 	public String data;
 	public Date createDate;
 	public Date updateDate;
-	
-	
+
 	public Blob() {
 	
 	}

@@ -5,7 +5,7 @@ public class CDMIOperationException extends Exception{
 	private int responseCode;
 	
 	/**
-	 * 
+	 * CDMIOperationException constructor.
 	 * @param message
 	 * @param responseCode
 	 */
@@ -16,7 +16,7 @@ public class CDMIOperationException extends Exception{
 	
 	/**
 	 * 
-	 * @return
+	 * @return responseCode
 	 */
 	public int getResponseCode() {
 		return responseCode;

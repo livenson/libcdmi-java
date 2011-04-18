@@ -1,9 +1,5 @@
 package eu.venusc.cdmi;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -19,7 +15,7 @@ public class CDMIConnectionTest extends TestCase {
 	CDMIConnection cdmiConnection = null;
 	/* CDMI Server url*/
 	URL cdmiServer = null;
-	Map parameters = null;
+	Map <String, Object> parameters = null;
 	/* Username, Password*/
 	Credentials creds = null;
 
@@ -28,7 +24,7 @@ public class CDMIConnectionTest extends TestCase {
 		try {
 			
 			cdmiServer = new URL("http://localhost:2364");
-			parameters = new HashMap();
+			parameters = new HashMap <String, Object>();
 			/* File format*/
 			parameters.put("mimetype", "text/plain");
 			creds = new UsernamePasswordCredentials("aaa", "aaa");

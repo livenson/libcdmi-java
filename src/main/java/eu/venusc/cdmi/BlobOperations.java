@@ -19,9 +19,9 @@ public class BlobOperations implements CDMIContentType{
 	private DefaultHttpClient httpclient;
 	
 	/**
-	 * 
+	 * BlobOperations Constructor.
+	 * @param creds
 	 * @param endpoint
-	 * @param httpclient
 	 */
 	public BlobOperations(URL endpoint, DefaultHttpClient httpclient) {
 		this.httpclient = httpclient;
@@ -29,14 +29,14 @@ public class BlobOperations implements CDMIContentType{
 	}
 
 	/**
-	 * This method creates a blob object
+	 * This method creates a blob object.
 	 * @param remoteFNM
 	 * @param value
 	 * @param parameters
-	 * @return
+	 * @return HttpResponse
 	 * @throws IOException
 	 */
-	public HttpResponse create(String remoteFNM, byte[] value, Map parameters)
+	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
 			throws IOException {
 
 		HttpPut httpput = new HttpPut(endpoint + "/" + remoteFNM);
@@ -64,13 +64,14 @@ public class BlobOperations implements CDMIContentType{
 		createObj.writeJSONString(out);
 		StringEntity entity = new StringEntity(out.toString());
 		httpput.setEntity(entity);
+		
 		return httpclient.execute(httpput);
 	}
 	
 	/**
-	 * This methos removes a blob object from container
+	 * This method removes a blob object from container.
 	 * @param remoteFNM
-	 * @return
+	 * @return HttpResponse
 	 * @throws IOException
 	 */
 	public HttpResponse delete(String remoteFNM) throws IOException {
@@ -85,19 +86,19 @@ public class BlobOperations implements CDMIContentType{
 	}
 	
 	/**
-	 * This method reads contnet of a blob object
+	 * This method reads contents of a blob object.
 	 * @param remoteFNM
-	 * @return
+	 * @return HttpResponse
 	 * @throws IOException
 	 */
 	public HttpResponse read(String remoteFNM) throws IOException {
 
 		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);
-
 		httpget.setHeader("Accept", CDMI_DATA);
 		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",
 				CDMI_SPEC_VERSION);
+		
 		return httpclient.execute(httpget);
 	}
 

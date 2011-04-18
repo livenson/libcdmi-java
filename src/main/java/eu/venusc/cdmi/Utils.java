@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class Utils {
 	 * http://www.exampledepot.com/egs/java.io/File2ByteArray.html
 	 * 
 	 * @param file
-	 * @return
+	 * @return byte[] 
 	 * @throws IOException
 	 */
 	public static byte[] getBytesFromFile(File file) throws IOException {
@@ -68,8 +67,10 @@ public class Utils {
 		is.close();
 		return bytes;
 	}
+
 	/**
-	 * This method reads the content of a text file as a string
+	 * This method reads the content of a text file as a string.
+	 * 
 	 * @param file
 	 * @return String
 	 * @throws IOException
@@ -92,7 +93,7 @@ public class Utils {
 	 * 
 	 * @param response
 	 * @param elementName
-	 * @return
+	 * @return Object[]
 	 * @throws IOException
 	 * @throws ParseException
 	 */
@@ -112,8 +113,8 @@ public class Utils {
 				return new LinkedHashMap();
 			}
 		};
-		Map json = (Map) parser.parse(is, containerFactory);
-		LinkedList theList = (LinkedList) json.get(elementName);
+		Map jsonMap = (Map) parser.parse(is, containerFactory);
+		LinkedList theList = (LinkedList) jsonMap.get(elementName);
 		Object[] elements = theList.toArray();
 		stream.close();
 		is.close();
@@ -121,11 +122,11 @@ public class Utils {
 	}
 
 	/**
-	 * This method extracts a specific element from the response
+	 * This method extracts a specific element from the response.
 	 * 
 	 * @param response
 	 * @param elementName
-	 * @return
+	 * @return Object
 	 * @throws IOException
 	 * @throws ParseException
 	 */
@@ -145,9 +146,9 @@ public class Utils {
 			}
 		};
 
-		Map json = (Map) parser.parse(is, containerFactory);
+		Map jsonMap = (Map) parser.parse(is, containerFactory);
 
-		Object content = json.get(elementName);
+		Object content = jsonMap.get(elementName);
 		stream.close();
 		is.close();
 		return content;
@@ -155,18 +156,19 @@ public class Utils {
 	}
 
 	/**
-	 * This method returns the content of a binary file decoded using Base64
+	 * This method returns the content of a binary file decoded using Base64.
 	 * 
 	 * @param response
-	 * @return
+	 * @return Object
 	 * @throws IOException
+	 * @throws ParseException 
 	 */
 	public static Object getObjectContent(HttpResponse response)
-			throws IOException {
+			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		InputStream stream = response.getEntity().getContent();
 		InputStreamReader is = new InputStreamReader(stream);
-		Map json = null;
+		
 
 		parser = new JSONParser();
 		stream = response.getEntity().getContent();
@@ -181,19 +183,20 @@ public class Utils {
 				return new LinkedHashMap();
 			}
 		};
-		String content = json.get("value").toString();
-		Base64 decoder = new Base64();
-		Object obj = decoder.decodeBase64(content);
+		Map jsonMap = (Map) parser.parse(is, containerFactory);
+
+		String content = jsonMap.get("value").toString();
+		Object decodedObj = Base64.decodeBase64(content);
 		stream.close();
 		is.close();
-		return obj;
+		return decodedObj;
 	}
 
 	/**
-	 * This method returns the content of a text object
+	 * This method returns the content of a text object.
 	 * 
 	 * @param response
-	 * @return
+	 * @return String
 	 * @throws IOException
 	 * @throws ParseException
 	 */
@@ -214,24 +217,27 @@ public class Utils {
 			}
 		};
 
-		Map json = (Map) parser.parse(is, containerFactory);
+		Map jsonMap = (Map) parser.parse(is, containerFactory);
+		String content = jsonMap.get("value").toString();
 		stream.close();
 		is.close();
-		return json.get("value").toString();
+		return content;
 
 	}
-	
+
 	/**
-	 * This methods creats a local file base on the user inputs
+	 * This methods creates a local file base on the user inputs.
+	 * 
 	 * @param content
 	 * @param name
 	 * @param format
-	 * @return
+	 * @return File 
 	 * @throws IOException
 	 */
-	static File createFile(String content, String name, String format) throws IOException {
+	static File createFile(String content, String name, String format)
+			throws IOException {
 
-		File tempFile = File.createTempFile(name,format);
+		File tempFile = File.createTempFile(name, format);
 		// Write to temporary file
 		BufferedWriter out = new BufferedWriter(new FileWriter(tempFile));
 		out.write(content);
@@ -240,5 +246,5 @@ public class Utils {
 		return tempFile;
 
 	}
-	
+
 }
