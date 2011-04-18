@@ -35,10 +35,10 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 		random = new Random();
 		baseContainer = "/";
 		containerName =  "libcdmi-java"+ random.nextInt();
-		tmpFile = createTempFile("put your data here");
+		tmpFile = Utils.createFile("put your data here", "venus_c", ".txt");
 		objectName = tmpFile.getName();
 	}
-
+	
 	@After
 	public void tearDown() throws Exception {
 
@@ -90,7 +90,12 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 		HttpResponse response = null;
 		int responseCode = 0;
 		try {
-
+			/*
+			 * 1. Create a container to embody a bolb
+			 * 2. Create the blob 
+			 * 3. Check to see if the blob is created successfully. 
+			 * */
+			
 			response = cops.create(containerName, parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
@@ -183,6 +188,14 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 		HttpResponse response = null;
 		int responseCode = 0;
 		try {
+			
+			/*
+			 * 1. Create a container to embody a bolb
+			 * 2. Create the blob 
+			 * 3. Delete the content of the bolb
+			 * 4. Check the result to see if bolb is removed
+			 * */
+			
 			response = cops.create(containerName + "/", parameters);
 
 			responseCode = response.getStatusLine().getStatusCode();

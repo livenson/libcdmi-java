@@ -15,10 +15,9 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 
 public class CDMIConnection {
 
-	private DefaultHttpClient httpclient;
-
-	private BlobOperations blobProxy;
-	private ContainerOperations containerProxy;
+	private DefaultHttpClient httpclient = null;
+	private BlobOperations blobProxy = null;
+	private ContainerOperations containerProxy = null;
 
 	/**
 	 * 
@@ -27,7 +26,9 @@ public class CDMIConnection {
 	 */
 	public CDMIConnection(Credentials creds, URL endpoint) {
 
-
+		/**
+		 * Create and manage pool of connections
+		 */
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));

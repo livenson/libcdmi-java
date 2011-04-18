@@ -36,7 +36,7 @@ public class ContainerOperations {
 	}
 
 	/**
-	 * 
+	 * To create a container
 	 * @param remoteContainer
 	 * @param parameters
 	 * @return
@@ -64,7 +64,7 @@ public class ContainerOperations {
 	}
 
 	/**
-	 * 
+	 * To delete a container
 	 * @param remoteContainer
 	 * @return
 	 * @throws ClientProtocolException
@@ -85,7 +85,7 @@ public class ContainerOperations {
 	}
 
 	/**
-	 * 
+	 * To read container information
 	 * @param remoteContainer
 	 * @param fields
 	 * @return
@@ -110,7 +110,7 @@ public class ContainerOperations {
 	}
 
 	/**
-	 * 
+	 * To get childrens of a specific container
 	 * @param remoteContainer
 	 * @return
 	 * @throws ClientProtocolException

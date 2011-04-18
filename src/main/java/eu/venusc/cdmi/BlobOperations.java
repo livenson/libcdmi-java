@@ -17,12 +17,25 @@ public class BlobOperations {
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
-
+	
+	/**
+	 * 
+	 * @param endpoint
+	 * @param httpclient
+	 */
 	public BlobOperations(URL endpoint, DefaultHttpClient httpclient) {
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
 
+	/**
+	 * This method creates a blob object
+	 * @param remoteFNM
+	 * @param value
+	 * @param parameters
+	 * @return
+	 * @throws IOException
+	 */
 	public HttpResponse create(String remoteFNM, byte[] value, Map parameters)
 			throws IOException {
 
@@ -53,7 +66,13 @@ public class BlobOperations {
 		httpput.setEntity(entity);
 		return httpclient.execute(httpput);
 	}
-
+	
+	/**
+	 * This methos removes a blob object from container
+	 * @param remoteFNM
+	 * @return
+	 * @throws IOException
+	 */
 	public HttpResponse delete(String remoteFNM) throws IOException {
 
 		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteFNM);
@@ -64,7 +83,13 @@ public class BlobOperations {
 
 		return httpclient.execute(httpdelete);
 	}
-
+	
+	/**
+	 * This method reads contnet of a blob object
+	 * @param remoteFNM
+	 * @return
+	 * @throws IOException
+	 */
 	public HttpResponse read(String remoteFNM) throws IOException {
 
 		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);

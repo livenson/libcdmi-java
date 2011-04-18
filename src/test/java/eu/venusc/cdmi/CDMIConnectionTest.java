@@ -35,16 +35,4 @@ public class CDMIConnectionTest extends TestCase {
 
 	}
 
-	static File createTempFile(String content) throws IOException {
-
-		File tempFile = File.createTempFile("venusc_", ".txt");
-		// Write to temporary file
-		BufferedWriter out = new BufferedWriter(new FileWriter(tempFile));
-		out.write(content);
-		out.close();
-		tempFile.deleteOnExit();
-		return tempFile;
-
-	}
-
 }
