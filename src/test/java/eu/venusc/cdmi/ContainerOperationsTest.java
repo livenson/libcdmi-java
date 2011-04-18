@@ -27,28 +27,35 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		random = new Random();
 		baseContainer = "/";
 		containerName = "libcdmi-java" + random.nextInt();
-
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown(){
 
-		Object[] children = (Object[]) cops.getChildren(baseContainer);
+		Object[] children;
+		try {
+			children = (Object[]) cops.getChildren(baseContainer);
 
-		for (int i = 0; i < children.length; i++) {
+			for (int i = 0; i < children.length; i++) {
 
-			HttpResponse response = cops.delete((String) children[i]);
-			int responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != 204) {
-				fail("Container " + containerName + " could not be cleanup");
-				throw new Exception("Container " + containerName
-						+ " could not be cleanup");
+				HttpResponse response = cops.delete((String) children[i]);
+				int responseCode = response.getStatusLine().getStatusCode();
+				if (responseCode != 204) 
+					fail("Container " + containerName + " could not be cleanup");
 			}
 
+		} catch (CDMIOperationException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		containerName = null;
 		random = null;
@@ -68,7 +75,7 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 		HttpResponse response = null;
 		int responseCode = 0;
 		try {
-			response = cops.create(containerName +"/", parameters);
+			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 			if (responseCode != 201)
 				fail("Could not create  the container: " + containerName + "/");
@@ -101,7 +108,7 @@ public class ContainerOperationsTest extends CDMIConnectionTest {
 
 		try {
 			// create some containers
-			response = cops.create(containerName + 0 +"/" , parameters);
+			response = cops.create(containerName + 0 + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != 201)
