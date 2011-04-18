@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.print.attribute.ResolutionSyntax;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,19 +115,27 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 	 * Test method for reading a blob object.
 	 * {@link eu.venusc.cdmi.BlobOperations#read(java.lang.String, java.lang.String)}
 	 * .
+	 * @throws ParseException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testRead() {
-
+	public void testRead() throws ParseException, IOException {
 		HttpResponse response = null;
-		int responseCode = 0;
+		int responseCode = -1;
 		try {
+			
+			/*
+			 * 1. Create a container to embody a bolb
+			 * 2. Create the blob 
+			 * 3. Read the content of the bolb
+			 * 4. Compare the local and remote blobs
+			 * */
 			response = cops.create(containerName + "/", parameters);
 			responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != 201)
 				fail("Could not create container: " + containerName + "/");
-
+			
 			response = bops.create(containerName + "/"+ objectName, Utils
 					.getBytesFromFile(tmpFile), parameters);
 
@@ -133,11 +144,15 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			if (responseCode != 201)
 				fail("Could not create blob object " + containerName + "/"
 						+ objectName);
-
+			
 			response = bops.read(containerName + "/"+ objectName);
 			responseCode = response.getStatusLine().getStatusCode();
 			String mimeType = (String) Utils.getElement(response, "mimetype");
-			if (mimeType != "text/plain") {
+			
+			response = bops.read(containerName + "/"+ objectName);
+			responseCode = response.getStatusLine().getStatusCode();
+			
+			if (!mimeType.equals("text/plain")) {
 				assertEquals("Local and remote blob objects equal: ",
 						new String(Utils.getBytesFromFile(tmpFile)), Utils
 								.getObjectContent(response));
@@ -145,18 +160,17 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 			} else {
 				assertEquals("Local and remote blob objects equal: ",
 						new String(Utils.getBytesFromFile(tmpFile)), Utils
-								.getObjectContent(response));
+								.getTextContent(response));
 			}
 
 		} catch (ClientProtocolException e) {
 			System.err.println(e.getMessage());
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		} catch (CDMIOperationException e) {
-			System.err.println(e.getMessage());
+			System.err.println(e.getMessage()+"  ++ " + responseCode);
 		}
-
-	}
+	} 
 
 	/**
 	 * Test method for deleting a blob object: response code 204 in case of
@@ -164,7 +178,6 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 	 * {@link eu.venusc.cdmi.BlobOperations#delete(java.lang.String, java.lang.String)}
 	 * .
 	 */
-
 	@Test
 	public void testDelete() {
 		HttpResponse response = null;
@@ -197,8 +210,6 @@ public class BlobOperationsTest extends CDMIConnectionTest {
 		} catch (CDMIOperationException e) {
 			System.err.println(e.getMessage());
 		}}
-		
-
 	}
 
 

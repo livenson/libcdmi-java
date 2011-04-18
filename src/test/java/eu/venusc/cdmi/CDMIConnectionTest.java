@@ -14,8 +14,6 @@ import junit.framework.TestCase;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
-import eu.venusc.cdmi.CDMIConnection;
-
 public class CDMIConnectionTest extends TestCase {
 
 	CDMIConnection cdmiConnection = null;
