@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 
-class CommonBodyElements implements JSONStreamAware {
+abstract class CommonBodyElements implements JSONStreamAware {
 
 	String objectURI;
 	String objectID;
@@ -17,13 +17,6 @@ class CommonBodyElements implements JSONStreamAware {
 	String domainURI;
 	String mimetype;
 	MetadataField metadata;
-
-	public CommonBodyElements() {
-	}
-
-	@Override
-	public void writeJSONString(Writer out) throws IOException {
-	}
 }
 
 class BlobCreateRequest extends CommonBodyElements {
@@ -36,10 +29,8 @@ class BlobCreateRequest extends CommonBodyElements {
 	String value;
 
 	public BlobCreateRequest() {
-
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -79,7 +70,6 @@ class BlobCreateResponse extends CommonBodyElements {
 
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -117,7 +107,6 @@ class BlobReadResponse extends CommonBodyElements {
 
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -160,7 +149,6 @@ class ContainerReadRequest extends CommonBodyElements {
 	public ContainerReadRequest() {
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 
@@ -199,7 +187,6 @@ class ContainerCreateRequest extends CommonBodyElements {
 	public ContainerCreateRequest() {
 	}
 
-	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj = new LinkedHashMap();
 		if (objectURI != null)
@@ -229,7 +216,6 @@ class MetadataField implements JSONAware {
 	public MetadataField() {
 	}
 
-	@Override
 	public String toJSONString() {
 		JSONObject obj = new JSONObject();
 		obj.put("cdmi_size", cdmi_size);

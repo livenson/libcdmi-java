@@ -22,7 +22,6 @@ public class BlobOperations implements CDMIContentType{
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
-
 	
 	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
 			throws IOException {

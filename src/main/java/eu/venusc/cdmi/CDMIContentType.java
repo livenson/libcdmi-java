@@ -1,6 +1,5 @@
 package eu.venusc.cdmi;
 
-
 /**
  * Static values of possible CDMI content types.
  */

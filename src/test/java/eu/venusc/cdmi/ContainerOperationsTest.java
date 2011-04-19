@@ -66,7 +66,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 
 		Set<String> set = new HashSet<String>();
 
-		// create 100 containers
+		// create containers
 		for (int i = 0; i < 3; i++) {
 
 			HttpResponse response = cops.create(containerName + i + "/",
@@ -75,7 +75,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 
 			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + containerName + "/");
-			set.add(containerName + i);
+			set.add(containerName + i + "/");
 		}
 
 		String[] children = cops.getChildren(baseContainer);
