@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseFactory;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -21,27 +25,13 @@ public class ContainerOperations implements CDMIContentType{
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
 
-	/**
-	 * ContainerOperations constructor.
-	 * @param endpoint
-	 * @param httpclient
-	 */
-
 	public ContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
 
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
 
-	/**
-	 * To create a CDMI container.
-	 * @param remoteContainer
-	 * @param parameters
-	 * @return HttpResponse
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 */
+
 	public HttpResponse create(String remoteContainer, Map <String, Object> parameters)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -61,14 +51,7 @@ public class ContainerOperations implements CDMIContentType{
 		return httpclient.execute(httpput);
 	}
 
-	/**
-	 * To delete a CDMI container.
-	 * @param remoteContainer
-	 * @return HttpResponse
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 */
+
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
@@ -82,14 +65,7 @@ public class ContainerOperations implements CDMIContentType{
 		return httpclient.execute(httpdelete);
 	}
 
-	/**
-	 * To read a CDMI container information.
-	 * @param remoteContainer
-	 * @param fields
-	 * @return HttpResponse
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
+
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
 		String path = endpoint.toString() + "/" + remoteContainer + "/?";
@@ -107,26 +83,19 @@ public class ContainerOperations implements CDMIContentType{
 		return httpclient.execute(httpget);
 	}
 
-	/**
-	 * To get children of a specific CDMI container.
-	 * @param remoteContainer
-	 * @return Object[]
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws CDMIOperationException
-	 * @throws ParseException
-	 */
-	public Object[] getChildren(String remoteContainer)
+
+	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
 		String path = endpoint.toString();
 		path = path + "/" + remoteContainer;
 
-		List<String> children = new ArrayList<String>();
-		children.add("children");
-		HttpResponse hr = read(remoteContainer, children);
-		return Utils.getElementArrary(hr, "children");
-
+		List<String> fields = new ArrayList<String>();
+		fields.add("children");
+		HttpResponse response = read(remoteContainer, fields);
+		// TODO: better conversion to String[]?
+		List <Object> elements = Utils.getElementCollection(response, "children");		
+		return (String[]) elements.toArray(new String[elements.size()]);
 	}
 
 }

@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,13 +69,7 @@ public class Utils {
 		return bytes;
 	}
 
-	/**
-	 * This method reads the content of a text file as a string.
-	 * 
-	 * @param file
-	 * @return String
-	 * @throws IOException
-	 */
+
 	public static String getContent(String file) throws IOException {
 
 		FileReader fileReader = new FileReader(file);
@@ -88,16 +83,7 @@ public class Utils {
 
 	}
 
-	/**
-	 * This method can be used to extract an element array from the response.
-	 * 
-	 * @param response
-	 * @param elementName
-	 * @return Object[]
-	 * @throws IOException
-	 * @throws ParseException
-	 */
-	public static Object[] getElementArrary(HttpResponse response,
+	public static List getElementCollection(HttpResponse response,
 			String elementName) throws IOException, ParseException {
 
 		JSONParser parser = new JSONParser();
@@ -114,22 +100,13 @@ public class Utils {
 			}
 		};
 		Map jsonMap = (Map) parser.parse(is, containerFactory);
-		LinkedList theList = (LinkedList) jsonMap.get(elementName);
-		Object[] elements = theList.toArray();
+		List foundElements = (LinkedList) jsonMap.get(elementName);
 		stream.close();
 		is.close();
-		return elements;
+		return foundElements;
 	}
 
-	/**
-	 * This method extracts a specific element from the response.
-	 * 
-	 * @param response
-	 * @param elementName
-	 * @return Object
-	 * @throws IOException
-	 * @throws ParseException
-	 */
+	
 	public static Object getElement(HttpResponse response, String elementName)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
@@ -155,14 +132,7 @@ public class Utils {
 
 	}
 
-	/**
-	 * This method returns the content of a binary file decoded using Base64.
-	 * 
-	 * @param response
-	 * @return Object
-	 * @throws IOException
-	 * @throws ParseException 
-	 */
+
 	public static Object getObjectContent(HttpResponse response)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
@@ -192,14 +162,7 @@ public class Utils {
 		return decodedObj;
 	}
 
-	/**
-	 * This method returns the content of a text object.
-	 * 
-	 * @param response
-	 * @return String
-	 * @throws IOException
-	 * @throws ParseException
-	 */
+	
 	public static String getTextContent(HttpResponse response)
 			throws IOException, ParseException {
 
@@ -225,15 +188,7 @@ public class Utils {
 
 	}
 
-	/**
-	 * This methods creates a local file base on the user inputs.
-	 * 
-	 * @param content
-	 * @param name
-	 * @param format
-	 * @return File 
-	 * @throws IOException
-	 */
+	
 	static File createFile(String content, String name, String format)
 			throws IOException {
 

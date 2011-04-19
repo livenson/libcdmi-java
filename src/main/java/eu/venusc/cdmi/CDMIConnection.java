@@ -19,11 +19,7 @@ public class CDMIConnection {
 	private BlobOperations blobProxy = null;
 	private ContainerOperations containerProxy = null;
 
-	/**
-	 * CDMIConnection constructor.
-	 * @param creds
-	 * @param endpoint
-	 */
+	
 	public CDMIConnection(Credentials creds, URL endpoint) {
 
 		/** Create and manage pool of connections. */

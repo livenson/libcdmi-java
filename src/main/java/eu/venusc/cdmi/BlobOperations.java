@@ -17,25 +17,13 @@ public class BlobOperations implements CDMIContentType{
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
-	
-	/**
-	 * BlobOperations Constructor.
-	 * @param creds
-	 * @param endpoint
-	 */
+
 	public BlobOperations(URL endpoint, DefaultHttpClient httpclient) {
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
 
-	/**
-	 * This method creates a blob object.
-	 * @param remoteFNM
-	 * @param value
-	 * @param parameters
-	 * @return HttpResponse
-	 * @throws IOException
-	 */
+	
 	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
 			throws IOException {
 
@@ -68,12 +56,7 @@ public class BlobOperations implements CDMIContentType{
 		return httpclient.execute(httpput);
 	}
 	
-	/**
-	 * This method removes a blob object from container.
-	 * @param remoteFNM
-	 * @return HttpResponse
-	 * @throws IOException
-	 */
+	
 	public HttpResponse delete(String remoteFNM) throws IOException {
 
 		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteFNM);
@@ -85,12 +68,7 @@ public class BlobOperations implements CDMIContentType{
 		return httpclient.execute(httpdelete);
 	}
 	
-	/**
-	 * This method reads contents of a blob object.
-	 * @param remoteFNM
-	 * @return HttpResponse
-	 * @throws IOException
-	 */
+	
 	public HttpResponse read(String remoteFNM) throws IOException {
 
 		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);
