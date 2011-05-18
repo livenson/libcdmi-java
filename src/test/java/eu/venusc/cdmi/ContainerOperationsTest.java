@@ -22,12 +22,12 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 	static Random random = new Random();
 
 	public ContainerOperationsTest(String name) throws MalformedURLException {
-		super(name);				
+		super(name);
 		cops = cdmiConnection.getContainerProxy();
 	}
 
 	@Before
-	public void setUp() throws IOException {		
+	public void setUp() throws IOException {
 		baseContainer = "/";
 		containerName = "libcdmi-java" + random.nextInt();
 	}
@@ -39,23 +39,27 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		String[] children = cops.getChildren(baseContainer);
 
 		for (int i = 0; i < children.length; i++) {
-			HttpResponse response = cops.delete(baseContainer + "/"
-					+ children[i]);
+			String url = baseContainer + "/" + children[i];
+			HttpResponse response = cops.delete(url);
 			int responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != REQUEST_DELETED)
-				fail("Container " + baseContainer + " could not be cleaned up.");
+
+			if (responseCode == REQUEST_NOT_FOUND
+					|| responseCode == REQUEST_DELETED)
+				continue;
+			else
+				fail("Container " + url + " could not be cleaned up.");
+
 		}
 
 	}
-
 
 	@Test
 	public void testCreate() throws ClientProtocolException, IOException,
 			CDMIOperationException {
 
-		HttpResponse response = cops.create(containerName +"/", parameters);
+		HttpResponse response = cops.create(containerName + "/", parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container " + containerName+"/", responseCode,
+		assertEquals("Creating container " + containerName + "/", responseCode,
 				REQUEST_CREATED);
 
 	}
@@ -89,7 +93,6 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		childSet.clear();
 
 	}
-
 
 	@Test
 	public void testDelete() throws ClientProtocolException, IOException,
