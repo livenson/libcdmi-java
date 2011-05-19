@@ -32,6 +32,10 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@Before
 	public void setUp() throws IOException {		
 		baseContainer = "/";
+		baseContainer = "/";
+		if (baseContainer.charAt(baseContainer.length()-1)!='/')
+			baseContainer = baseContainer + "/";
+		
 		containerName = "libcdmi-java" + random.nextInt();
 		tmpFile = Utils.createFile("put your data here", "venus_c", ".txt");
 		objectName = tmpFile.getName();		
@@ -40,44 +44,40 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@After
 	public void tearDown() throws IOException, CDMIOperationException {
 
-		HttpResponse response = null;
-		int responseCode = 0;
-
-		response = bops.delete(containerName + "/" + objectName);
-		responseCode = response.getStatusLine().getStatusCode();
+		HttpResponse response = response = bops.delete(baseContainer+ containerName + "/" + objectName);
+		int responseCode = response.getStatusLine().getStatusCode();
 		// we only accept failures for already deleted objects
 		if (responseCode != REQUEST_DELETED && responseCode != REQUEST_NOT_FOUND) {		
-			fail("Could not clean the object: " + containerName + "/" + objectName);
+			fail("Could not clean the object: " + baseContainer+ containerName + "/" + objectName);
 		}
 		/* delete the container */
-		response = cops.delete(containerName + "/");
+		response = cops.delete(baseContainer+ containerName);
 		responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_DELETED)
-			fail("Could not clean the container: " + containerName + "/");
+			fail("Could not clean up the container: " + baseContainer+ containerName + "/");
 	}
 
 
 	@Test
 	public void testCreate() throws ClientProtocolException, IOException,
 			CDMIOperationException {
-		HttpResponse response = null;
-		int responseCode = 0;
+		
 		/*
 		 * 1. Create a container for a blob.
 		 * 2. Create the blob.
 		 * 3. Check to see if the blob is created successfully.
 		 */
 
-		response = cops.create(containerName, parameters);
-		responseCode = response.getStatusLine().getStatusCode();
+		HttpResponse  response = cops.create(baseContainer+ containerName, parameters);
+		int  responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create container: " + responseCode);
+			fail("Could not create container: "+ baseContainer+ containerName+"/" + responseCode);
 
-		response = bops.create(containerName + "/" + objectName, Utils
+		response = bops.create(baseContainer+ containerName + "/" + objectName, Utils
 				.getBytesFromFile(tmpFile), parameters);
 		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Object created: ", REQUEST_CREATED, responseCode);
+		assertEquals("Object could not be created: "+baseContainer+ containerName + "/" + objectName, REQUEST_CREATED, responseCode);
 
 	}
 
@@ -85,8 +85,8 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@Test
 	public void testRead() throws IOException, CDMIOperationException,
 			ParseException {		
-		HttpResponse response = null;
-		int responseCode = -1;
+		 
+		
 
 		/*
 		 * 1. Create a container to embody a blob. 
@@ -94,26 +94,26 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 		 * 3. Read the content of the blob. 
 		 * 4. Compare the local and remote blobs.
 		 */
-		response = cops.create(containerName + "/", parameters);
+		HttpResponse response = cops.create(baseContainer+ containerName , parameters);
 		
-		responseCode = response.getStatusLine().getStatusCode();	
+		int responseCode = response.getStatusLine().getStatusCode();	
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create container: " + containerName + "/");
+			fail("Could not create container: " + baseContainer+ containerName + "/");
 
-		response = bops.create(containerName + "/" + objectName, Utils
+		response = bops.create(baseContainer+ containerName + "/" + objectName, Utils
 				.getBytesFromFile(tmpFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 		
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create blob object " + containerName + "/"
+			fail("Could not create blob object " + baseContainer+ containerName + "/"
 					+ objectName);
 
-		response = bops.read(containerName + "/" + objectName);
+		response = bops.read(baseContainer+ containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		String mimeType = (String) Utils.getElement(response, "mimetype");
 
-		response = bops.read(containerName + "/" + objectName);
+		response = bops.read(baseContainer+ containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
 
 		if (!mimeType.equals("text/plain")) {
@@ -132,29 +132,26 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	
 	@Test
 	public void testDelete() throws IOException, CDMIOperationException {
-		HttpResponse response = null;
-		int responseCode = 0;
-
 		/*
 		 * 1. Create a container for a blob.
 		 * 2. Create the blob. 
 		 * 3. Delete the content of the blob.
 		 * 4. Check the result to see if blob is removed.
 		 */
-		response = cops.create(containerName + "/", parameters);
-		responseCode = response.getStatusLine().getStatusCode();
+		HttpResponse response = cops.create(baseContainer+ containerName , parameters);
+		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create container: " + containerName + "/");
+			fail("Could not create container: " + baseContainer+ containerName + "/");
 
-		response = bops.create(containerName + "/" + objectName, Utils
+		response = bops.create(baseContainer+ containerName + "/" + objectName, Utils
 				.getBytesFromFile(tmpFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create blob object " + containerName + "/"
+			fail("Could not create blob object: " +baseContainer+ containerName + "/"
 					+ objectName);
 
-		response = bops.delete(containerName + "/" + objectName);
+		response = bops.delete(baseContainer+ containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object deleted: ", REQUEST_DELETED, responseCode);
 

@@ -31,8 +31,7 @@ public class ContainerOperations implements CDMIContentType{
 	public HttpResponse create(String remoteContainer, Map <String, Object> parameters)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpPut httpput = new HttpPut(endpoint + "/" + remoteContainer);
-
+		HttpPut httpput = new HttpPut(endpoint  + remoteContainer);
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -64,12 +63,11 @@ public class ContainerOperations implements CDMIContentType{
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
-		String path = endpoint.toString() + "/" + remoteContainer + "/?";
-
+		String path = endpoint.toString() + remoteContainer + "?";
+	
 		for (String f : fields) {
 			path = path + f;
 		}
-
 		HttpGet httpget = new HttpGet(path);
 		httpget.setHeader("Content-Type", CDMI_CONTAINER);
 		httpget.setHeader("Accept", CDMI_CONTAINER);
@@ -83,8 +81,9 @@ public class ContainerOperations implements CDMIContentType{
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
+		
 		String path = endpoint.toString();
-		path = path + "/" + remoteContainer;
+		path = path + remoteContainer;
 
 		List<String> fields = new ArrayList<String>();
 		fields.add("children");

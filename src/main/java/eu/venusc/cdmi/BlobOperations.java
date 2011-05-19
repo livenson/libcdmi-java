@@ -26,7 +26,8 @@ public class BlobOperations implements CDMIContentType{
 	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
 			throws IOException {
 
-		HttpPut httpput = new HttpPut(endpoint + "/" + remoteFNM);
+		HttpPut httpput = new HttpPut(endpoint +  remoteFNM);
+		System.out.println(endpoint +remoteFNM);
 		httpput.setHeader("Content-Type", CDMI_DATA);
 		httpput.setHeader("Accept", CDMI_DATA);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -58,7 +59,7 @@ public class BlobOperations implements CDMIContentType{
 	
 	public HttpResponse delete(String remoteFNM) throws IOException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteFNM);
+		HttpDelete httpdelete = new HttpDelete(endpoint + remoteFNM);
 		httpdelete.setHeader("Content-Type", CDMI_DATA);
 		httpdelete.setHeader("Accept", CDMI_DATA);
 		httpdelete.setHeader("X-CDMI-Specification-Version",

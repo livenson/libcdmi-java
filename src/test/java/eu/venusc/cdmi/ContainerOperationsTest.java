@@ -28,7 +28,11 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 
 	@Before
 	public void setUp() throws IOException {
+
 		baseContainer = "/";
+		if (baseContainer.charAt(baseContainer.length()-1)!='/')
+			baseContainer = baseContainer + "/";
+		
 		containerName = "libcdmi-java" + random.nextInt();
 	}
 
@@ -39,7 +43,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		String[] children = cops.getChildren(baseContainer);
 
 		for (int i = 0; i < children.length; i++) {
-			String url = baseContainer + "/" + children[i];
+			String url = baseContainer + children[i];
 			HttpResponse response = cops.delete(url);
 			int responseCode = response.getStatusLine().getStatusCode();
 
@@ -57,10 +61,11 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 	public void testCreate() throws ClientProtocolException, IOException,
 			CDMIOperationException {
 
-		HttpResponse response = cops.create(containerName + "/", parameters);
+		HttpResponse response = cops.create(baseContainer + containerName,
+				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container " + containerName + "/", responseCode,
-				REQUEST_CREATED);
+		assertEquals("Creating container " + baseContainer + containerName
+				+ "/", REQUEST_CREATED, responseCode);
 
 	}
 
@@ -73,12 +78,13 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		// create containers
 		for (int i = 0; i < 3; i++) {
 
-			HttpResponse response = cops.create(containerName + i + "/",
-					parameters);
+			HttpResponse response = cops.create(baseContainer + containerName
+					+ i, parameters);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != REQUEST_CREATED)
-				fail("Could not create  the container: " + containerName + "/");
+				fail("Could not create  the container: " + baseContainer
+						+ containerName + "/");
 			set.add(containerName + i + "/");
 		}
 
@@ -102,14 +108,16 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		int responseCode = 0;
 
 		// Create a container
-		response = cops.create(containerName + "/", parameters);
+		response = cops.create(baseContainer + containerName, parameters);
 		responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create the container: " + containerName + "/");
+			fail("Could not create the container: " + baseContainer
+					+ containerName);
 		// delete the container
-		response = cops.delete(containerName + "/");
+		response = cops.delete(baseContainer + containerName);
 		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Container deleted: ", REQUEST_DELETED, responseCode);
+		assertEquals("Container deleted: " + baseContainer + containerName,
+				REQUEST_DELETED, responseCode);
 	}
 }

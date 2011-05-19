@@ -8,7 +8,7 @@ public class CDMITestSuite extends TestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for eu.venusc.test");
-		suite.addTestSuite(ContainerOperationsTest.class);
+		//suite.addTestSuite(ContainerOperationsTest.class);
 		suite.addTestSuite(BlobOperationsTest.class);
 		return suite;
 	}
