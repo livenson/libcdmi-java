@@ -13,8 +13,7 @@ Then you need to issue these commands:
 If you intend to run the junit test cases, edit CDMIConnectionTest.java according to
 your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionTest.java
 
-	cdmiServer: url to your server cdmiServer = new URL("http://hostname:port"); 
-	"mimetype": set to your own format 
+	cdmiServer: url to your server cdmiServer = new URL("http://hostname:port"); 	
 	creds: your username/password
 	
 	$ mvn install
