@@ -32,7 +32,6 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@Before
 	public void setUp() throws IOException {		
 		baseContainer = "/";
-		baseContainer = "/";
 		if (baseContainer.charAt(baseContainer.length()-1)!='/')
 			baseContainer = baseContainer + "/";
 		

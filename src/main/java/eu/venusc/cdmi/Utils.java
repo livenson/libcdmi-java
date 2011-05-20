@@ -2,6 +2,7 @@ package eu.venusc.cdmi;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
 import org.apache.http.HttpResponse;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -131,7 +133,13 @@ public class Utils {
 
 	}
 
-
+	/**
+	 * To extract a CDMI object contents.
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static Object getObjectContent(HttpResponse response)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
@@ -188,7 +196,7 @@ public class Utils {
 	}
 
 	
-	static File createFile(String content, String name, String format)
+	public static File createFile(String content, String name, String format)
 			throws IOException {
 
 		File tempFile = File.createTempFile(name, format);
@@ -200,5 +208,28 @@ public class Utils {
 		return tempFile;
 
 	}
+	
+	/**
+	 * This method returns contents of a NonCDMI object as an byte array.
+	 * @param response
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
+	public static byte[] extractContents(HttpResponse response)  throws IllegalStateException, IOException {
+		
+		 InputStream in = response.getEntity().getContent();
+
+         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+         int bytesRead = 0;
+         byte[] buffer = new byte[2048];
+         while ((bytesRead = in.read(buffer, 0, buffer.length)) > 0) {
+             outputStream.write(buffer, 0, bytesRead);
+         }
+         response.getEntity().consumeContent();
+         byte[] outBuffer = outputStream.toByteArray();
+         return outBuffer;
+	}
+	
 
 }

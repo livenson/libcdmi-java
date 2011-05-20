@@ -50,7 +50,7 @@ public class ContainerOperations implements CDMIContentType{
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + "/" + remoteContainer);
+		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer);
 
 		httpdelete.setHeader("Content-Type", CDMI_CONTAINER);
 		httpdelete.setHeader("Accept", CDMI_CONTAINER);

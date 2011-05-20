@@ -18,6 +18,25 @@ public class CDMIConnection {
 	private DefaultHttpClient httpclient = null;
 	private BlobOperations blobProxy = null;
 	private ContainerOperations containerProxy = null;
+	private NCDMIContainerOperations ncdmiContainerProxy = null;
+	private NCDMIBlobOperations ncdmiBlobProxy = null;
+	
+
+	public NCDMIBlobOperations getNcdmiBlobProxy() {
+		return ncdmiBlobProxy;
+	}
+
+	public void setNcdmiBlobProxy(NCDMIBlobOperations ncdmiBlobProxy) {
+		this.ncdmiBlobProxy = ncdmiBlobProxy;
+	}
+
+	public NCDMIContainerOperations getNcdmiContainerProxy() {
+		return ncdmiContainerProxy;
+	}
+
+	public void setNcdmiContainerProxy(NCDMIContainerOperations ncdmiContainerProxy) {
+		this.ncdmiContainerProxy = ncdmiContainerProxy;
+	}
 
 	public CDMIConnection(Credentials creds, URL endpoint) {
 
@@ -41,7 +60,10 @@ public class CDMIConnection {
 
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
 		this.containerProxy = new ContainerOperations(endpoint, httpclient);
+		this.ncdmiContainerProxy = new NCDMIContainerOperations(endpoint, httpclient);
+		this.ncdmiBlobProxy = new NCDMIBlobOperations(endpoint, httpclient);
 	}
+	
 
 	public DefaultHttpClient getHttpclient() {
 		return httpclient;

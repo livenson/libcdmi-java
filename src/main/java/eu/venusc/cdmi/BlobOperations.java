@@ -27,7 +27,6 @@ public class BlobOperations implements CDMIContentType{
 			throws IOException {
 
 		HttpPut httpput = new HttpPut(endpoint +  remoteFNM);
-		System.out.println(endpoint +remoteFNM);
 		httpput.setHeader("Content-Type", CDMI_DATA);
 		httpput.setHeader("Accept", CDMI_DATA);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -71,7 +70,7 @@ public class BlobOperations implements CDMIContentType{
 	
 	public HttpResponse read(String remoteFNM) throws IOException {
 
-		HttpGet httpget = new HttpGet(endpoint + "/" + remoteFNM);
+		HttpGet httpget = new HttpGet(endpoint + remoteFNM);
 		httpget.setHeader("Accept", CDMI_DATA);
 		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",
