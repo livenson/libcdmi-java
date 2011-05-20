@@ -12,9 +12,9 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
-public class ContainerOperationsTest extends CDMIConnectionWrapper implements
-		CDMIResponseStatus {
+public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
 	ContainerOperations cops = null;
 	static String containerName = null;
@@ -64,7 +64,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container " + baseContainer + containerName
+		assertEquals("Creating container failed:" + baseContainer + containerName
 				+ "/", REQUEST_CREATED, responseCode);
 
 	}
@@ -95,7 +95,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 			childSet.add(children[i]);
 		}
 
-		assertEquals("Getting the container children: ", set, childSet);
+		assertEquals("Getting the container children failed: ", set, childSet);
 		childSet.clear();
 
 	}
@@ -103,13 +103,9 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 	@Test
 	public void testDelete() throws ClientProtocolException, IOException,
 			CDMIOperationException {
-
-		HttpResponse response = null;
-		int responseCode = 0;
-
 		// Create a container
-		response = cops.create(baseContainer + containerName, parameters);
-		responseCode = response.getStatusLine().getStatusCode();
+		HttpResponse response = cops.create(baseContainer + containerName, parameters);
+		int responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create the container: " + baseContainer
@@ -117,7 +113,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper implements
 		// delete the container
 		response = cops.delete(baseContainer + containerName);
 		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Container deleted: " + baseContainer + containerName,
+		assertEquals("Container could not be deleted: " + baseContainer + containerName,
 				REQUEST_DELETED, responseCode);
 	}
 }

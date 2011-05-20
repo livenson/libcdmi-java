@@ -12,8 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BlobOperationsTest extends CDMIConnectionWrapper implements
-		CDMIResponseStatus {
+import static eu.venusc.cdmi.CDMIResponseStatus.*;
+
+public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	ContainerOperations cops = null;
 	BlobOperations bops = null;
@@ -60,7 +61,6 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@Test
 	public void testCreate() throws ClientProtocolException, IOException,
 			CDMIOperationException {
-		
 		/*
 		 * 1. Create a container for a blob.
 		 * 2. Create the blob.
@@ -84,9 +84,6 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 	@Test
 	public void testRead() throws IOException, CDMIOperationException,
 			ParseException {		
-		 
-		
-
 		/*
 		 * 1. Create a container to embody a blob. 
 		 * 2. Create the blob. 

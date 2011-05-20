@@ -2,6 +2,7 @@ package eu.venusc.cdmi;
 
 import static org.junit.Assert.fail;
 
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashSet;
@@ -14,17 +15,17 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
-public class NCDMIContainerOperationsTest extends CDMIConnectionWrapper implements
-CDMIResponseStatus {
+public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper{
 
 	
-	NCDMIContainerOperations cops = null;
+	NonCDMIContainerOperations cops = null;
 	static String containerName = null;
 	static String baseContainer = null;
 	static Random random = new Random();
 
-	public NCDMIContainerOperationsTest(String name) throws MalformedURLException {
+	public NonCDMIContainerOperationsTest(String name) throws MalformedURLException {
 		super(name);
 		cops = cdmiConnection.getNcdmiContainerProxy();
 	}

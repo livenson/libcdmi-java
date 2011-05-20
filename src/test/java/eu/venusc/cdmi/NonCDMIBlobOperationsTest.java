@@ -1,5 +1,6 @@
 package eu.venusc.cdmi;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,19 +12,19 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
-public class NCDMIBlobOperationsTest extends CDMIConnectionWrapper implements
-		CDMIResponseStatus {
+public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 
-	NCDMIContainerOperations cops = null;
-	NCDMIBlobOperations bops = null;
+	NonCDMIContainerOperations cops = null;
+	NonCDMIBlobOperations bops = null;
 	static String containerName = null;
 	static String baseContainer = null;
 	static String objectName = null;
 	static Random random = new Random();
 	static File tmpFile = null;
 
-	public NCDMIBlobOperationsTest(String name) throws MalformedURLException {
+	public NonCDMIBlobOperationsTest(String name) throws MalformedURLException {
 		super(name);
 		cops = cdmiConnection.getNcdmiContainerProxy();
 		bops = cdmiConnection.getNcdmiBlobProxy();
