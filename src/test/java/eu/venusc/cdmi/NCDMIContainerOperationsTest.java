@@ -36,7 +36,7 @@ CDMIResponseStatus {
 		if (baseContainer.charAt(baseContainer.length()-1)!='/')
 			baseContainer = baseContainer + "/";
 		
-		containerName = "noncdmi-container" + random.nextInt();
+		containerName = "noncdmi-container" + random.nextInt() + "/";
 	}
 	@After
 	public void tearDown() throws IOException, ParseException,
@@ -76,15 +76,13 @@ CDMIResponseStatus {
 
 		// create containers
 		for (int i = 0; i < 3; i++) {
-
-			HttpResponse response = cops.create(baseContainer + containerName
-					+ i, parameters);
+			String container_name = containerName + i + "/";
+			HttpResponse response = cops.create(baseContainer + container_name, parameters);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != REQUEST_CREATED)
-				fail("Could not create  the container: " + baseContainer
-						+ containerName + "/");
-			set.add(containerName + i + "/");
+				fail("Could not create  the container: " + baseContainer + container_name);
+			set.add(container_name);
 		}
 
 		String[] children = cops.getChildren(baseContainer);
