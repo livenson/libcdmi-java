@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
 import org.apache.http.HttpResponse;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -206,15 +205,10 @@ public class Utils {
 		out.close();
 		tempFile.deleteOnExit();
 		return tempFile;
-
 	}
 	
 	/**
 	 * This method returns contents of a NonCDMI object as an byte array.
-	 * @param response
-	 * @return
-	 * @throws IllegalStateException
-	 * @throws IOException
 	 */
 	public static byte[] extractContents(HttpResponse response)  throws IllegalStateException, IOException {
 		

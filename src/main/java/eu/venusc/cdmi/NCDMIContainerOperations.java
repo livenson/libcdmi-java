@@ -1,7 +1,6 @@
 package eu.venusc.cdmi;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.parser.ParseException;
 
@@ -22,7 +20,6 @@ public class NCDMIContainerOperations implements CDMIContentType {
 	private DefaultHttpClient httpclient;
 
 	public NCDMIContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
-
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
@@ -30,14 +27,13 @@ public class NCDMIContainerOperations implements CDMIContentType {
 	public HttpResponse create(String remoteContainer,
 			Map<String, Object> parameters) throws ClientProtocolException,
 			IOException, CDMIOperationException {
-
-		HttpPut httpput = new HttpPut(endpoint + remoteContainer);
+		HttpPut httpput = new HttpPut(endpoint + remoteContainer + "/");
 		return httpclient.execute(httpput);
 	}
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
-		String path = endpoint.toString() + remoteContainer + "?";
+		String path = endpoint.toString() + remoteContainer + "/" + "?";
 
 		for (String f : fields) {
 			path = path + f;
@@ -49,8 +45,7 @@ public class NCDMIContainerOperations implements CDMIContentType {
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer);
-		//httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
+		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer + "/");
 		return httpclient.execute(httpdelete);
 	}
 

@@ -23,7 +23,6 @@ public class NCDMIBlobOperations implements CDMIContentType {
 
 	public HttpResponse create(String remoteFNM, byte[] value,
 			Map<String, Object> parameters) throws IOException {
-
 		HttpPut httpput = new HttpPut(endpoint + remoteFNM);
 
 		String contentType = parameters.get("mimetype") != null ? (String) parameters
@@ -35,20 +34,13 @@ public class NCDMIBlobOperations implements CDMIContentType {
 		return httpclient.execute(httpput);
 	}
 
-	public HttpResponse delete(String remoteFNM) throws IOException {
-
+	public HttpResponse delete(String remoteFNM) throws IOException {		
 		HttpDelete httpdelete = new HttpDelete(endpoint + remoteFNM);
-		// httpdelete.setHeader("X-CDMI-Specification-Version",
-		// CDMI_SPEC_VERSION);
-
 		return httpclient.execute(httpdelete);
 	}
 
-	public HttpResponse read(String remoteFNM) throws IOException {
-
-		HttpGet httpget = new HttpGet(endpoint + remoteFNM);
-		
-		return httpclient.execute(httpget);
+	public HttpResponse read(String remoteFNM) throws IOException {		
+		HttpGet httpget = new HttpGet(endpoint + remoteFNM);		
+		return httpclient.execute(httpget);		
 	}
-
 }

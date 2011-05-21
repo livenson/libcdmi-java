@@ -23,7 +23,7 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 		this.createConnection();
 	}
 	
-	protected void createConnection() throws MalformedURLException {
+	protected void createConnection() throws MalformedURLException {		
 		cdmiServer = new URL("http://localhost:2364");
 		parameters = new HashMap <String, Object>();
 		/* File format*/

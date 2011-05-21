@@ -1,7 +1,5 @@
 package eu.venusc.cdmi;
 
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashSet;
@@ -36,7 +34,7 @@ CDMIResponseStatus {
 		if (baseContainer.charAt(baseContainer.length()-1)!='/')
 			baseContainer = baseContainer + "/";
 		
-		containerName = "noncdmi-container" + random.nextInt() + "/";
+		containerName = "noncdmi-container" + random.nextInt();
 	}
 	@After
 	public void tearDown() throws IOException, ParseException,
@@ -53,7 +51,7 @@ CDMIResponseStatus {
 					|| responseCode == REQUEST_DELETED)
 				continue;
 			else
-			fail("Container " + url + " could not be cleaned up." + responseCode);
+				fail("Container " + url + " could not be cleaned up." + responseCode);
 
 		}
 	}
@@ -72,27 +70,27 @@ CDMIResponseStatus {
 	public void testGetChildren() throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
 
-		Set<String> set = new HashSet<String>();
+		Set<String> newContainers = new HashSet<String>();
 
 		// create containers
 		for (int i = 0; i < 3; i++) {
-			String container_name = containerName + i + "/";
+			String container_name = containerName + "_" + i;
 			HttpResponse response = cops.create(baseContainer + container_name, parameters);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != REQUEST_CREATED)
 				fail("Could not create  the container: " + baseContainer + container_name);
-			set.add(container_name);
+			newContainers.add(container_name + "/");
 		}
 
 		String[] children = cops.getChildren(baseContainer);
 
 		Set<String> childSet = new HashSet<String>();
 		for (int i = 0; i < children.length; i++) {
-			childSet.add(children[i]+ "/");
+			childSet.add(children[i]);
 		}
-
-		assertEquals("Getting the container children: ", set, childSet);
+		
+		assertTrue("Checking created container children.", childSet.containsAll(newContainers));
 		childSet.clear();
 
 	}

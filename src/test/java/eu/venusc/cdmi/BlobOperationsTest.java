@@ -36,18 +36,17 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 			baseContainer = baseContainer + "/";
 		
 		containerName = "libcdmi-java" + random.nextInt();
-		tmpFile = Utils.createFile("put your data here", "venus_c", ".txt");
-		objectName = tmpFile.getName();		
+		tmpFile = Utils.createFile("Place for advertisment.", "libcdmi-java", ".txt");
+		objectName = tmpFile.getName();
 	}
 
 	@After
 	public void tearDown() throws IOException, CDMIOperationException {
-
-		HttpResponse response = response = bops.delete(baseContainer+ containerName + "/" + objectName);
+		HttpResponse response = bops.delete(baseContainer + containerName + "/" + objectName);
 		int responseCode = response.getStatusLine().getStatusCode();
 		// we only accept failures for already deleted objects
 		if (responseCode != REQUEST_DELETED && responseCode != REQUEST_NOT_FOUND) {		
-			fail("Could not clean the object: " + baseContainer+ containerName + "/" + objectName);
+			fail("Could not clean the object: " + baseContainer + containerName + "/" + objectName);
 		}
 		/* delete the container */
 		response = cops.delete(baseContainer+ containerName);
@@ -77,27 +76,22 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 				.getBytesFromFile(tmpFile), parameters);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object could not be created: "+baseContainer+ containerName + "/" + objectName, REQUEST_CREATED, responseCode);
-
 	}
 
-	
 	@Test
 	public void testRead() throws IOException, CDMIOperationException,
-			ParseException {		
-		 
-		
-
+			ParseException {				 
 		/*
 		 * 1. Create a container to embody a blob. 
 		 * 2. Create the blob. 
 		 * 3. Read the content of the blob. 
 		 * 4. Compare the local and remote blobs.
 		 */
-		HttpResponse response = cops.create(baseContainer+ containerName , parameters);
+		HttpResponse response = cops.create(baseContainer + containerName, parameters);
 		
 		int responseCode = response.getStatusLine().getStatusCode();	
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create container: " + baseContainer+ containerName + "/");
+			fail("Could not create container: " + baseContainer + containerName + "/");
 
 		response = bops.create(baseContainer+ containerName + "/" + objectName, Utils
 				.getBytesFromFile(tmpFile), parameters);
@@ -105,7 +99,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 		responseCode = response.getStatusLine().getStatusCode();
 		
 		if (responseCode != REQUEST_CREATED)
-			fail("Could not create blob object " + baseContainer+ containerName + "/"
+			fail("Could not create blob object " + baseContainer + containerName + "/"
 					+ objectName);
 
 		response = bops.read(baseContainer+ containerName + "/" + objectName);
@@ -125,9 +119,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 					Utils.getBytesFromFile(tmpFile)), Utils
 					.getTextContent(response));
 		}
-
 	}
-
 	
 	@Test
 	public void testDelete() throws IOException, CDMIOperationException {
@@ -153,6 +145,5 @@ public class BlobOperationsTest extends CDMIConnectionWrapper implements
 		response = bops.delete(baseContainer+ containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object deleted: ", REQUEST_DELETED, responseCode);
-
 	}
 }
