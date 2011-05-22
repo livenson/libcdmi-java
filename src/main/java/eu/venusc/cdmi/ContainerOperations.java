@@ -15,8 +15,9 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.parser.ParseException;
+import static eu.venusc.cdmi.CDMIContentType.*;
 
-public class ContainerOperations implements CDMIContentType{
+public class ContainerOperations{
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;

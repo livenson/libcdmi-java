@@ -10,8 +10,8 @@ public class CDMITestSuite extends TestSuite {
 		TestSuite suite = new TestSuite("Test for eu.venusc.cdmi");
 		suite.addTestSuite(ContainerOperationsTest.class);
 		suite.addTestSuite(BlobOperationsTest.class);
-		suite.addTestSuite(NCDMIContainerOperationsTest.class);
-		suite.addTestSuite(NCDMIBlobOperationsTest.class);
+		suite.addTestSuite(NonCDMIContainerOperationsTest.class);
+		suite.addTestSuite(NonCDMIBlobOperationsTest.class);
 		return suite;
 	}
 }
