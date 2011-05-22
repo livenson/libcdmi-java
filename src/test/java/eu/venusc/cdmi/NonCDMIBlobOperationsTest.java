@@ -26,8 +26,8 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 
 	public NonCDMIBlobOperationsTest(String name) throws MalformedURLException {
 		super(name);
-		cops = cdmiConnection.getNcdmiContainerProxy();
-		bops = cdmiConnection.getNcdmiBlobProxy();
+		cops = cdmiConnection.getNonCdmiContainerProxy();
+		bops = cdmiConnection.getNonCdmiBlobProxy();
 	}
 
 	@Before
@@ -111,9 +111,10 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 					.extractContents(response)));
 
 		} else {
+			
 			assertEquals("Local and remote blob objects are not equal: ", new String(
-					Utils.getBytesFromFile(tmpFile)), Utils
-					.extractContents(response));
+					Utils.getBytesFromFile(tmpFile)), new String(Utils
+					.extractContents(response)));
 		}
 	}
 

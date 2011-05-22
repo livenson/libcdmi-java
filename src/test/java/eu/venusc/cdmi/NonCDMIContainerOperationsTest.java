@@ -24,7 +24,7 @@ public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper {
 
 	public NonCDMIContainerOperationsTest(String name) throws MalformedURLException {
 		super(name);
-		cops = cdmiConnection.getNcdmiContainerProxy();
+		cops = cdmiConnection.getNonCdmiContainerProxy();
 	}
 
 	
