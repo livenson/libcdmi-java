@@ -1,6 +1,6 @@
 This is a Java client implementation of Cloud Data Management Interface (CDMI)
 version 1.0 developed at PDC Center for High Performance Computing as a part of
-Venus-C project. To use this library, you should have:
+Venus-C project. To use this library, you should have following software installed:
 
 1. Java SE 6.0 (http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
 2. Maven 2.x (http://maven.apache.org/download.html)  
@@ -15,7 +15,8 @@ your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionTest.java
 
 	cdmiServer: url to your server cdmiServer = new URL("http://hostname:port"); 	
 	creds: your username/password
-	
+
+Before isussing the following command make sure your vcdm server is up and running.
 	$ mvn install
 
 This will produce a jar file called: libcdmi-1.0.jar in target folder.
