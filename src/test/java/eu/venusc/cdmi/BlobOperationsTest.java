@@ -52,7 +52,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 			fail("Could not clean the object: " + baseContainer + containerName
 					+ "/" + objectName);
 		}
-		/* delete the container */
+		// delete the container 
 		response = cops.delete(baseContainer + containerName);
 		responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_DELETED)
@@ -63,11 +63,6 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 	@Test
 	public void testCreate() throws ClientProtocolException, IOException,
 			CDMIOperationException {
-
-		/*
-		 * 1. Create a container for a blob. 2. Create the blob. 3. Check to see
-		 * if the blob is created successfully.
-		 */
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -89,10 +84,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 	@Test
 	public void testRead() throws IOException, CDMIOperationException,
 			ParseException {
-		/*
-		 * 1. Create a container to embody a blob. 2. Create the blob. 3. Read
-		 * the content of the blob. 4. Compare the local and remote blobs.
-		 */
+
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 
@@ -132,10 +124,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testDelete() throws IOException, CDMIOperationException {
-		/*
-		 * 1. Create a container for a blob. 2. Create the blob. 3. Delete the
-		 * content of the blob. 4. Check the result to see if blob is removed.
-		 */
+
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();

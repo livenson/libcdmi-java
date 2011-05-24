@@ -20,7 +20,7 @@ public class CDMIConnection {
 	private ContainerOperations containerProxy;
 	private NonCDMIContainerOperations nonCdmiContainerProxy;
 	private NonCDMIBlobOperations nonCdmiBlobProxy;
-	
+	private URL endpoint;
 
 	public NonCDMIBlobOperations getNonCdmiBlobProxy() {
 		return nonCdmiBlobProxy;
@@ -57,13 +57,21 @@ public class CDMIConnection {
 		httpclient = new DefaultHttpClient(cm);
 		httpclient.getCredentialsProvider().setCredentials(
 				new AuthScope(endpoint.getHost(), endpoint.getPort()), creds);
-
+		this.endpoint = endpoint;
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
 		this.containerProxy = new ContainerOperations(endpoint, httpclient);
 		this.nonCdmiContainerProxy = new NonCDMIContainerOperations(endpoint, httpclient);
 		this.nonCdmiBlobProxy = new NonCDMIBlobOperations(endpoint, httpclient);
 	}
 	
+
+	public URL getEndpoint() {
+		return endpoint;
+	}
+
+	public void setEndpoint(URL endpoint) {
+		this.endpoint = endpoint;
+	}
 
 	public DefaultHttpClient getHttpclient() {
 		return httpclient;

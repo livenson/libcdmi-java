@@ -133,7 +133,7 @@ public class Utils {
 	}
 
 	/**
-	 * To extract a CDMI object contents.
+	 * To extract a binary CDMI object contents.
 	 * @param response
 	 * @return
 	 * @throws IOException
@@ -195,10 +195,10 @@ public class Utils {
 	}
 
 	
-	public static File createFile(String content, String name, String format)
+	public static File createFile(String content, String prefix, String suffix)
 			throws IOException {
 
-		File tempFile = File.createTempFile(name, format);
+		File tempFile = File.createTempFile(prefix, suffix);
 		// Write to temporary file
 		BufferedWriter out = new BufferedWriter(new FileWriter(tempFile));
 		out.write(content);

@@ -52,7 +52,7 @@ public class BlobOperations{
 		createObj.writeJSONString(out);
 		StringEntity entity = new StringEntity(out.toString());
 		httpput.setEntity(entity);
-		
+		System.out.println(endpoint +  remoteFNM);
 		return httpclient.execute(httpput);
 	}
 	
@@ -76,7 +76,7 @@ public class BlobOperations{
 		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",
 				CDMI_SPEC_VERSION);
-		
+		System.out.println(endpoint +remoteFNM);
 		return httpclient.execute(httpget);
 	}
 
