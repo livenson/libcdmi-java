@@ -10,6 +10,9 @@ Then you need to issue these commands:
 	$ git clone git@github.com:livenson/libcdmi-java.git
 	$ cd  libcdmi-java
 
+If you just want to build a jar, run the following command:
+	$ mvn install -DskipTests
+
 If you intend to run the junit test cases, edit CDMIConnectionTest.java according to
 your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionTest.java
 
