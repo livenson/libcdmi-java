@@ -28,8 +28,7 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 		parameters = new HashMap <String, Object>();
 		/* File format: 
 		 * http://silk.nih.gov/public/zzyzzap.@www.silk.types.html
-		 **/
-		parameters.put("mimetype", "application/x-zip-compressed");
+		 **/		
 		creds = new UsernamePasswordCredentials("aaa", "aaa");
 		cdmiConnection = new CDMIConnection(creds, cdmiServer);		
 	}	

@@ -21,9 +21,13 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 	static String containerName;
 	static String baseContainer;
 	static String objectName;
+	static String textObjectName;
+	static String binaryObjectName;
+	
 	static Random random = new Random();
-	static File tmpFile;
-
+	static File tmpTextFile;
+	static File tmpBinaryFile;
+	
 	public NonCDMIBlobOperationsTest(String name) throws MalformedURLException {
 		super(name);
 		cops = cdmiConnection.getNonCdmiContainerProxy();
@@ -38,16 +42,19 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
 		containerName = "noncdmi-container" + random.nextInt();
 
-		if (parameters.get("mimetype").equals("text/plain"))
-			tmpFile = Utils.createFile("Place for advertisment.", "venus_c",
-					".txt");
-		else
-			tmpFile = Utils.createZip("venus_c");
-		objectName = tmpFile.getName();
+		tmpTextFile = Utils.createFile("Place for advertisment.", "venus_C",
+		".txt");
+		
+		tmpBinaryFile = Utils.createZip("venus_c");
+		textObjectName = tmpTextFile.getName();
+		binaryObjectName = tmpBinaryFile.getName();
+		
 	}
 
 	@After
 	public void tearDown() throws IOException, CDMIOperationException {
+		
+		for (String objectName: new String[] {textObjectName, binaryObjectName}) {
 		HttpResponse response = bops.delete(baseContainer + containerName + "/"
 				+ objectName);
 		int responseCode = response.getStatusLine().getStatusCode();
@@ -55,18 +62,21 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 		if (responseCode != REQUEST_DELETED
 				&& responseCode != REQUEST_NOT_FOUND) {
 			fail("Could not clean the object: " + baseContainer + containerName
-					+ "/" + objectName);
+					+ "/" + objectName+" "+responseCode);
 		}
-		response = cops.delete(baseContainer + containerName);
-		responseCode = response.getStatusLine().getStatusCode();
+		}
+		HttpResponse response = cops.delete(baseContainer + containerName);
+		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_DELETED)
 			fail("Could not clean up the container: " + baseContainer
-					+ containerName + "/");
+					+ containerName + "/"+" "+responseCode);
 	}
 
 	@Test
-	public void testCreate() throws ClientProtocolException, IOException,
-			CDMIOperationException {
+	public void testCreateText() throws ClientProtocolException, IOException,
+	CDMIOperationException {
+		
+		this.parameters.put("mimetype", "text/plain");
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -77,18 +87,42 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 					+ "/" + responseCode);
 
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName,
-				Utils.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + textObjectName,
+				Utils.getBytesFromFile(tmpTextFile), parameters);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object could not be created: " + baseContainer
 				+ containerName + "/" + objectName, REQUEST_CREATED,
 				responseCode);
-
 	}
 
 	@Test
-	public void testRead() throws IOException, CDMIOperationException,
+	public void testCreateBinary() throws ClientProtocolException, IOException,
+	CDMIOperationException {
+		
+		this.parameters.put("mimetype", "application/x-zip-compressed");
+
+		HttpResponse response = cops.create(baseContainer + containerName,
+				parameters);
+		int responseCode = response.getStatusLine().getStatusCode();
+
+		if (responseCode != REQUEST_CREATED)
+			fail("Could not create container: " + baseContainer + containerName
+					+ "/" + responseCode);
+
+		response = bops.create(
+				baseContainer + containerName + "/" + binaryObjectName,
+				Utils.getBytesFromFile(tmpBinaryFile), parameters);
+		responseCode = response.getStatusLine().getStatusCode();
+		assertEquals("Object could not be created: " + baseContainer
+				+ containerName + "/" + objectName, REQUEST_CREATED,
+				responseCode);
+	}
+	
+	@Test
+	public void testReadText() throws IOException, CDMIOperationException,
 			ParseException {
+		this.parameters.put("mimetype", "text/plain");
+
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 
@@ -97,21 +131,52 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 			fail("Could not create container: " + baseContainer + containerName
 					+ "/");
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName,
-				Utils.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + textObjectName,
+				Utils.getBytesFromFile(tmpTextFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create blob object " + baseContainer
-					+ containerName + "/" + objectName + " "+ responseCode);
+					+ containerName + "/" + textObjectName + " "+ responseCode);
 
-		response = bops.read(baseContainer + containerName + "/" + objectName);
+		response = bops.read(baseContainer + containerName + "/" + textObjectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		String mimeType = response.getFirstHeader("Content-Type").getValue();
 
 			assertEquals("Local and remote blob objects are not equal: ",
-					new String(Utils.getBytesFromFile(tmpFile)), new String(
+					new String(Utils.getBytesFromFile(tmpTextFile)), new String(
+							Utils.extractContents(response)));
+	}
+	
+	@Test
+	public void testReadBinary() throws IOException, CDMIOperationException,
+			ParseException {
+		this.parameters.put("mimetype", "application/x-zip-compressed");
+
+		HttpResponse response = cops.create(baseContainer + containerName,
+				parameters);
+
+		int responseCode = response.getStatusLine().getStatusCode();
+		if (responseCode != REQUEST_CREATED)
+			fail("Could not create container: " + baseContainer + containerName
+					+ "/");
+		response = bops.create(
+				baseContainer + containerName + "/" + binaryObjectName,
+				Utils.getBytesFromFile(tmpBinaryFile), parameters);
+
+		responseCode = response.getStatusLine().getStatusCode();
+
+		if (responseCode != REQUEST_CREATED)
+			fail("Could not create blob object " + baseContainer
+					+ containerName + "/" + binaryObjectName + " "+ responseCode);
+
+		response = bops.read(baseContainer + containerName + "/" + binaryObjectName);
+		responseCode = response.getStatusLine().getStatusCode();
+		String mimeType = response.getFirstHeader("Content-Type").getValue();
+
+			assertEquals("Local and remote blob objects are not equal: ",
+					new String(Utils.getBytesFromFile(tmpBinaryFile)), new String(
 							Utils.extractContents(response)));
 	}
 
@@ -125,16 +190,16 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 					+ "/");
 
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName,
-				Utils.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + textObjectName,
+				Utils.getBytesFromFile(tmpTextFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create blob object: " + baseContainer
-					+ containerName + "/" + objectName+ " "+ responseCode);
+					+ containerName + "/" + textObjectName+ " "+ responseCode);
 
 		response = bops
-				.delete(baseContainer + containerName + "/" + objectName);
+				.delete(baseContainer + containerName + "/" + textObjectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object could not be deleted: ", REQUEST_DELETED,
 				responseCode);
