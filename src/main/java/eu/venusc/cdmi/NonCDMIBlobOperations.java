@@ -31,8 +31,6 @@ public class NonCDMIBlobOperations{
 		ByteArrayEntity entity = new ByteArrayEntity(value);
 		entity.setContentType(contentType);
 		httpput.setEntity(entity);
-		System.out.println(endpoint +  remoteFNM);
-
 		return httpclient.execute(httpput);
 	}
 

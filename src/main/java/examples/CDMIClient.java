@@ -287,10 +287,10 @@ public class CDMIClient {
 		System.out.println("Cleanup " + conn.getEndpoint());
 
 		// delete cdmi
-		HttpResponse response = conn.getBlobProxy().delete(level2 + "/input_1");
+		HttpResponse response = conn.getBlobProxy().delete(level2 + "/input_1.local");
 		int responseCode = response.getStatusLine().getStatusCode();
 		
-		response = conn.getBlobProxy().delete(level2 + "/input_2");
+		response = conn.getBlobProxy().delete(level2 + "/input_2.local");
 		responseCode = response.getStatusLine().getStatusCode();
 		
 		response = conn.getContainerProxy().delete(level2);
@@ -300,10 +300,10 @@ public class CDMIClient {
 		responseCode = response.getStatusLine().getStatusCode();
 		
 		// delete non cdmi
-		response = conn.getBlobProxy().delete(ncdmi_level2 + "/input_1");
+		response = conn.getBlobProxy().delete(ncdmi_level2 + "/input_1.local");
 		responseCode = response.getStatusLine().getStatusCode();
 		
-		response = conn.getBlobProxy().delete(ncdmi_level2 + "/input_2");
+		response = conn.getBlobProxy().delete(ncdmi_level2 + "/input_2.local");
 		responseCode = response.getStatusLine().getStatusCode();
 		
 		response = conn.getContainerProxy().delete(ncdmi_level2);

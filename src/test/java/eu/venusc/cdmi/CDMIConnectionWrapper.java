@@ -24,10 +24,12 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 	}
 	
 	protected void createConnection() throws MalformedURLException {		
-		cdmiServer = new URL("http://174.129.16.188:2364/");
+		cdmiServer = new URL("http://localhost:2364/");
 		parameters = new HashMap <String, Object>();
-		/* File format*/
-		parameters.put("mimetype", "text/plain");
+		/* File format: 
+		 * http://silk.nih.gov/public/zzyzzap.@www.silk.types.html
+		 **/
+		parameters.put("mimetype", "application/x-zip-compressed");
 		creds = new UsernamePasswordCredentials("aaa", "aaa");
 		cdmiConnection = new CDMIConnection(creds, cdmiServer);		
 	}	

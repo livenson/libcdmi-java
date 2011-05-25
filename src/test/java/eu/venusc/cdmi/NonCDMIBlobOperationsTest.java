@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
-public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
+public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
 	NonCDMIContainerOperations cops;
 	NonCDMIBlobOperations bops;
@@ -37,7 +37,12 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 			baseContainer = baseContainer + "/";
 
 		containerName = "noncdmi-container" + random.nextInt();
-		tmpFile = Utils.createFile("put your data here", "venus_c", ".txt");
+
+		if (parameters.get("mimetype").equals("text/plain"))
+			tmpFile = Utils.createFile("Place for advertisment.", "venus_c",
+					".txt");
+		else
+			tmpFile = Utils.createZip("venus_c");
 		objectName = tmpFile.getName();
 	}
 
@@ -72,8 +77,8 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 					+ "/" + responseCode);
 
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName, Utils
-						.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + objectName,
+				Utils.getBytesFromFile(tmpFile), parameters);
 		responseCode = response.getStatusLine().getStatusCode();
 		assertEquals("Object could not be created: " + baseContainer
 				+ containerName + "/" + objectName, REQUEST_CREATED,
@@ -92,30 +97,22 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 			fail("Could not create container: " + baseContainer + containerName
 					+ "/");
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName, Utils
-						.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + objectName,
+				Utils.getBytesFromFile(tmpFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create blob object " + baseContainer
-					+ containerName + "/" + objectName);
+					+ containerName + "/" + objectName + " "+ responseCode);
 
 		response = bops.read(baseContainer + containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		String mimeType = response.getFirstHeader("Content-Type").getValue();
-		
-		if (mimeType.equals("text/plain")) {
-			assertEquals("Local and remote blob are not objects equal: ", new String(
-					Utils.getBytesFromFile(tmpFile)), new String(Utils
-					.extractContents(response)));
 
-		} else {
-			
-			assertEquals("Local and remote blob objects are not equal: ", new String(
-					Utils.getBytesFromFile(tmpFile)), new String(Utils
-					.extractContents(response)));
-		}
+			assertEquals("Local and remote blob objects are not equal: ",
+					new String(Utils.getBytesFromFile(tmpFile)), new String(
+							Utils.extractContents(response)));
 	}
 
 	@Test
@@ -128,17 +125,18 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper  {
 					+ "/");
 
 		response = bops.create(
-				baseContainer + containerName + "/" + objectName, Utils
-						.getBytesFromFile(tmpFile), parameters);
+				baseContainer + containerName + "/" + objectName,
+				Utils.getBytesFromFile(tmpFile), parameters);
 
 		responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create blob object: " + baseContainer
-					+ containerName + "/" + objectName);
+					+ containerName + "/" + objectName+ " "+ responseCode);
 
 		response = bops
 				.delete(baseContainer + containerName + "/" + objectName);
 		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Object could not be deleted: ", REQUEST_DELETED, responseCode);
+		assertEquals("Object could not be deleted: ", REQUEST_DELETED,
+				responseCode);
 	}
 }

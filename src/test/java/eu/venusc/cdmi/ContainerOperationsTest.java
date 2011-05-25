@@ -51,7 +51,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 					|| responseCode == REQUEST_DELETED)
 				continue;
 			else
-				fail("Container " + url + " could not be cleaned up.");
+				fail("Container " + url + " could not be cleaned up." + responseCode);
 
 		}
 

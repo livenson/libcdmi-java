@@ -5,15 +5,20 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -28,7 +33,7 @@ public class Utils {
 	 * http://www.exampledepot.com/egs/java.io/File2ByteArray.html
 	 * 
 	 * @param file
-	 * @return byte[] 
+	 * @return byte[]
 	 * @throws IOException
 	 */
 	public static byte[] getBytesFromFile(File file) throws IOException {
@@ -69,7 +74,6 @@ public class Utils {
 		return bytes;
 	}
 
-
 	public static String getContent(String file) throws IOException {
 
 		FileReader fileReader = new FileReader(file);
@@ -106,7 +110,6 @@ public class Utils {
 		return foundElements;
 	}
 
-	
 	public static Object getElement(HttpResponse response, String elementName)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
@@ -134,17 +137,17 @@ public class Utils {
 
 	/**
 	 * To extract a binary CDMI object contents.
+	 * The binary files are decoded as JSON BASE64 rules.
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public static Object getObjectContent(HttpResponse response)
+	public static String getObjectContent(HttpResponse response)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		InputStream stream = response.getEntity().getContent();
 		InputStreamReader is = new InputStreamReader(stream);
-		
 
 		parser = new JSONParser();
 		stream = response.getEntity().getContent();
@@ -162,13 +165,12 @@ public class Utils {
 		Map jsonMap = (Map) parser.parse(is, containerFactory);
 
 		String content = jsonMap.get("value").toString();
-		Object decodedObj = Base64.decodeBase64(content);
+		byte[] decodedObj = Base64.decodeBase64(content);
 		stream.close();
 		is.close();
-		return decodedObj;
+		return new String(decodedObj);
 	}
 
-	
 	public static String getTextContent(HttpResponse response)
 			throws IOException, ParseException {
 
@@ -194,7 +196,6 @@ public class Utils {
 
 	}
 
-	
 	public static File createFile(String content, String prefix, String suffix)
 			throws IOException {
 
@@ -206,24 +207,50 @@ public class Utils {
 		tempFile.deleteOnExit();
 		return tempFile;
 	}
-	
+
 	/**
 	 * This method returns contents of a NonCDMI object as an byte array.
 	 */
-	public static byte[] extractContents(HttpResponse response)  throws IllegalStateException, IOException {
-		
-		 InputStream in = response.getEntity().getContent();
+	public static byte[] extractContents(HttpResponse response)
+			throws IllegalStateException, IOException {
 
-         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-         int bytesRead = 0;
-         byte[] buffer = new byte[2048];
-         while ((bytesRead = in.read(buffer, 0, buffer.length)) > 0) {
-             outputStream.write(buffer, 0, bytesRead);
-         }
-         response.getEntity().consumeContent();
-         byte[] outBuffer = outputStream.toByteArray();
-         return outBuffer;
+		InputStream in = response.getEntity().getContent();
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		int bytesRead = 0;
+		byte[] buffer = new byte[2048];
+		while ((bytesRead = in.read(buffer, 0, buffer.length)) > 0) {
+			outputStream.write(buffer, 0, bytesRead);
+		}
+		response.getEntity().consumeContent();
+		byte[] outBuffer = outputStream.toByteArray();
+		return outBuffer;
 	}
-	
+
+
+	public static File createZip(String zipname) throws IOException {
+
+		byte[] buf = new byte[2048];
+		File file = Utils.createFile("Put your data here to be zipped." , "libcdmi-java" , ".txt");
+		FileInputStream fis = new FileInputStream(file);
+		fis.read(buf, 0, buf.length);
+
+		CRC32 crc = new CRC32();
+		ZipOutputStream out = new ZipOutputStream(
+				(OutputStream) new FileOutputStream(zipname));
+		out.setLevel(6);
+		ZipEntry entry = new ZipEntry(file.getName());
+		entry.setSize((long) buf.length);
+		crc.reset();
+		crc.update(buf);
+		entry.setCrc(crc.getValue());
+		out.putNextEntry(entry);
+		out.write(buf, 0, buf.length);
+		out.finish();
+		out.close();
+		file = new File(zipname);
+		file.deleteOnExit();
+		return file;
+	}
 
 }
