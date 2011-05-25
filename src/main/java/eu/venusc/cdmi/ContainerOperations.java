@@ -70,8 +70,7 @@ public class ContainerOperations{
 			path = path + f;
 		}
 		HttpGet httpget = new HttpGet(path);
-		httpget.setHeader("Content-Type", CDMI_CONTAINER);
-		httpget.setHeader("Accept", CDMI_CONTAINER);
+		httpget.setHeader("Accept", CDMI_CONTAINER);		
 		httpget.setHeader("X-CDMI-Specification-Version",
 				CDMI_SPEC_VERSION);
 
