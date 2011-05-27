@@ -64,7 +64,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container " + baseContainer + containerName
+		assertEquals("Creating container failed:" + baseContainer + containerName
 				+ "/", REQUEST_CREATED, responseCode);
 
 	}
@@ -103,7 +103,10 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	@Test
 	public void testDelete() throws ClientProtocolException, IOException,
 			CDMIOperationException {
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev-0.1
 		// Create a container
 		HttpResponse response = cops.create(baseContainer + containerName, parameters);
 		int responseCode = response.getStatusLine().getStatusCode();

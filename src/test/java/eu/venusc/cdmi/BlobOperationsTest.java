@@ -13,6 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
+<<<<<<< HEAD
+=======
+import static eu.venusc.cdmi.CDMIResponseStatus.*;
+
+>>>>>>> dev-0.1
 public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	ContainerOperations cops;
@@ -111,11 +116,21 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 	}
 
 	@Test
+<<<<<<< HEAD
 	public void testReadText() throws IOException, CDMIOperationException,
 			ParseException {
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
+=======
+	public void testCreate() throws ClientProtocolException, IOException,
+			CDMIOperationException {
+		/*
+		 * 1. Create a container for a blob.
+		 * 2. Create the blob.
+		 * 3. Check to see if the blob is created successfully.
+		 */
+>>>>>>> dev-0.1
 
 		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_CREATED)
@@ -152,6 +167,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 	}
 
 	@Test
+<<<<<<< HEAD
 	public void testReadBinary() throws IOException, CDMIOperationException,
 			ParseException {
 
@@ -160,6 +176,19 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
 
+=======
+	public void testRead() throws IOException, CDMIOperationException,
+			ParseException {		
+		/*
+		 * 1. Create a container to embody a blob. 
+		 * 2. Create the blob. 
+		 * 3. Read the content of the blob. 
+		 * 4. Compare the local and remote blobs.
+		 */
+		HttpResponse response = cops.create(baseContainer+ containerName , parameters);
+		
+		int responseCode = response.getStatusLine().getStatusCode();	
+>>>>>>> dev-0.1
 		if (responseCode != REQUEST_CREATED)
 			fail("Could not create container: " + baseContainer + containerName
 					+ "/" + " "+ responseCode);
