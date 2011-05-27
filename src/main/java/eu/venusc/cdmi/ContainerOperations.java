@@ -17,7 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.parser.ParseException;
 import static eu.venusc.cdmi.CDMIContentType.*;
 
-public class ContainerOperations{
+public class ContainerOperations {
 
 	private URL endpoint;
 	private DefaultHttpClient httpclient;
@@ -28,15 +28,14 @@ public class ContainerOperations{
 		this.endpoint = endpoint;
 	}
 
+	public HttpResponse create(String remoteContainer,
+			Map<String, Object> parameters) throws ClientProtocolException,
+			IOException, CDMIOperationException {
 
-	public HttpResponse create(String remoteContainer, Map <String, Object> parameters)
-			throws ClientProtocolException, IOException, CDMIOperationException {
-
-		HttpPut httpput = new HttpPut(endpoint  + remoteContainer);
+		HttpPut httpput = new HttpPut(endpoint + remoteContainer);
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
-		httpput.setHeader("X-CDMI-Specification-Version",
-				CDMI_SPEC_VERSION);
+		httpput.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		ContainerCreateRequest createObj = new ContainerCreateRequest();
 		StringWriter out = new StringWriter();
@@ -47,38 +46,33 @@ public class ContainerOperations{
 		return httpclient.execute(httpput);
 	}
 
-
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
 		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer + "/");
-		httpdelete.setHeader("X-CDMI-Specification-Version",
-				CDMI_SPEC_VERSION);
+		httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
 	}
 
-
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
 		String path = endpoint.toString() + remoteContainer + "?";
-	
+
 		for (String f : fields) {
 			path = path + f;
 		}
 		HttpGet httpget = new HttpGet(path);
-		httpget.setHeader("Accept", CDMI_CONTAINER);		
-		httpget.setHeader("X-CDMI-Specification-Version",
-				CDMI_SPEC_VERSION);
+		httpget.setHeader("Accept", CDMI_CONTAINER);
+		httpget.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpget);
 	}
 
-
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
-		
+
 		String path = endpoint.toString();
 		path = path + remoteContainer;
 
@@ -86,7 +80,8 @@ public class ContainerOperations{
 		fields.add("children");
 		HttpResponse response = read(remoteContainer, fields);
 		// TODO: better conversion to String[]?
-		List <Object> elements = Utils.getElementCollection(response, "children");		
+		List<Object> elements = Utils
+				.getElementCollection(response, "children");
 		return (String[]) elements.toArray(new String[elements.size()]);
 	}
 

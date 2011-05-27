@@ -3,6 +3,11 @@ package eu.venusc.cdmi;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
@@ -28,7 +33,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 	static File tmpTextFile;
 	static File tmpBinaryFile;
 	
-	public NonCDMIBlobOperationsTest(String name) throws MalformedURLException {
+	public NonCDMIBlobOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		super(name);
 		cops = cdmiConnection.getNonCdmiContainerProxy();
 		bops = cdmiConnection.getNonCdmiBlobProxy();

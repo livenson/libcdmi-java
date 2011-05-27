@@ -29,7 +29,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 
 public class CDMIConnection {
 
-<<<<<<< HEAD
+
 	private DefaultHttpClient httpclient;
 	private BlobOperations blobProxy;
 	private ContainerOperations containerProxy;
@@ -52,29 +52,6 @@ public class CDMIConnection {
 	public void setNonCdmiContainerProxy(
 			NonCDMIContainerOperations nonCdmiContainerProxy) {
 		this.nonCdmiContainerProxy = nonCdmiContainerProxy;
-=======
-	private DefaultHttpClient httpclient = null;
-	private BlobOperations blobProxy = null;
-	private ContainerOperations containerProxy = null;
-	private NonCDMIContainerOperations ncdmiContainerProxy = null;
-	private NonCDMIBlobOperations ncdmiBlobProxy = null;
-	
-
-	public NonCDMIBlobOperations getNcdmiBlobProxy() {
-		return ncdmiBlobProxy;
-	}
-
-	public void setNcdmiBlobProxy(NonCDMIBlobOperations ncdmiBlobProxy) {
-		this.ncdmiBlobProxy = ncdmiBlobProxy;
-	}
-
-	public NonCDMIContainerOperations getNcdmiContainerProxy() {
-		return ncdmiContainerProxy;
-	}
-
-	public void setNcdmiContainerProxy(NonCDMIContainerOperations ncdmiContainerProxy) {
-		this.ncdmiContainerProxy = ncdmiContainerProxy;
->>>>>>> dev-0.1
 	}
 
 	public CDMIConnection(Credentials creds, URL endpoint)
@@ -118,7 +95,6 @@ public class CDMIConnection {
 
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
 		this.containerProxy = new ContainerOperations(endpoint, httpclient);
-<<<<<<< HEAD
 		this.nonCdmiContainerProxy = new NonCDMIContainerOperations(endpoint,
 				httpclient);
 		this.nonCdmiBlobProxy = new NonCDMIBlobOperations(endpoint, httpclient);
@@ -130,10 +106,7 @@ public class CDMIConnection {
 
 	public void setEndpoint(URL endpoint) {
 		this.endpoint = endpoint;
-=======
-		this.ncdmiContainerProxy = new NonCDMIContainerOperations(endpoint, httpclient);
-		this.ncdmiBlobProxy = new NonCDMIBlobOperations(endpoint, httpclient);
->>>>>>> dev-0.1
+		
 	}
 
 	public DefaultHttpClient getHttpclient() {

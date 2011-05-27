@@ -2,6 +2,11 @@ package eu.venusc.cdmi;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -21,7 +26,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	static String baseContainer;
 	static Random random = new Random();
 
-	public ContainerOperationsTest(String name) throws MalformedURLException {
+	public ContainerOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		super(name);
 		cops = cdmiConnection.getContainerProxy();
 	}
@@ -103,10 +108,6 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	@Test
 	public void testDelete() throws ClientProtocolException, IOException,
 			CDMIOperationException {
-<<<<<<< HEAD
-
-=======
->>>>>>> dev-0.1
 		// Create a container
 		HttpResponse response = cops.create(baseContainer + containerName, parameters);
 		int responseCode = response.getStatusLine().getStatusCode();

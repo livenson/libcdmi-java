@@ -1,13 +1,15 @@
 package eu.venusc.cdmi;
 
-<<<<<<< HEAD
-=======
 import static org.junit.Assert.fail;
 
 
->>>>>>> dev-0.1
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -20,24 +22,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
-<<<<<<< HEAD
+
 public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper {
 
 	
 	NonCDMIContainerOperations cops;
 	static String containerName;
 	static String baseContainer;
-=======
-public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper{
-
-	
-	NonCDMIContainerOperations cops = null;
-	static String containerName = null;
-	static String baseContainer = null;
->>>>>>> dev-0.1
 	static Random random = new Random();
 
-	public NonCDMIContainerOperationsTest(String name) throws MalformedURLException {
+	public NonCDMIContainerOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		super(name);
 		cops = cdmiConnection.getNonCdmiContainerProxy();
 	}
