@@ -1,23 +1,19 @@
 package eu.venusc.cdmi;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManager;
-
 import org.apache.http.HttpHost;
+import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -25,10 +21,12 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 
 public class CDMIConnection {
-
 
 	private DefaultHttpClient httpclient;
 	private BlobOperations blobProxy;
@@ -54,32 +52,29 @@ public class CDMIConnection {
 		this.nonCdmiContainerProxy = nonCdmiContainerProxy;
 	}
 
-	public CDMIConnection(Credentials creds, URL endpoint)
+	public CDMIConnection(Credentials credentials, URL endpoint)
 			throws CertificateException, NoSuchAlgorithmException,
 			KeyManagementException, IOException, KeyStoreException,
 			UnrecoverableKeyException {
 
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		System.setProperty("java.protocol.handler.pkgs",
-				"com.sun.net.ssl.internal.www.protocol");
-		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		trustStore.load(null, null);
 
-		// trust All HttpsCertificates
+		SSLSocketFactory factory = new CustomSSLSocketFactory(trustStore);
+		factory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-		TrustManager[] trustManagers = new TrustManager[] { new FakeX509TrustManager() };
-		SSLContext context = SSLContext.getInstance("TLS");
-		context.init(null, trustManagers, new SecureRandom());
-		SSLSocketFactory sf = new SSLSocketFactory(context);
-		
+		HttpParams params = new BasicHttpParams();
+		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		
-		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
-				.getSocketFactory()));
-		schemeRegistry
-				.register(new Scheme("https", 443, sf.getSocketFactory()));
+		schemeRegistry.register(new Scheme("http", PlainSocketFactory
+				.getSocketFactory(), 80));
+		schemeRegistry.register(new Scheme("https", factory, 443));
+
 
 		ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
-				schemeRegistry);
+		schemeRegistry);
 		conMg.setMaxTotal(200);
 		conMg.setDefaultMaxPerRoute(20);
 
@@ -89,8 +84,8 @@ public class CDMIConnection {
 		httpclient = new DefaultHttpClient(conMg);
 
 		httpclient.getCredentialsProvider().setCredentials(
-				new AuthScope(endpoint.getHost(), endpoint.getPort()), creds);
-
+		new AuthScope(endpoint.getHost(), endpoint.getPort()), credentials);
+		
 		this.endpoint = endpoint;
 
 		this.blobProxy = new BlobOperations(endpoint, httpclient);
@@ -106,10 +101,10 @@ public class CDMIConnection {
 
 	public void setEndpoint(URL endpoint) {
 		this.endpoint = endpoint;
-		
+
 	}
 
-	public DefaultHttpClient getHttpclient() {
+	public HttpClient getHttpclient() {
 		return httpclient;
 	}
 

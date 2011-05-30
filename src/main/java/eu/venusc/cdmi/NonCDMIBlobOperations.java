@@ -5,18 +5,18 @@ import java.net.URL;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 public class NonCDMIBlobOperations{
 
 	private URL endpoint;
-	private DefaultHttpClient httpclient;
+	private HttpClient httpclient;
 
-	public NonCDMIBlobOperations(URL endpoint, DefaultHttpClient httpclient) {
+	public NonCDMIBlobOperations(URL endpoint, HttpClient httpclient) {
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}

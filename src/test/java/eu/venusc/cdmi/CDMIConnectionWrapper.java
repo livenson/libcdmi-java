@@ -22,7 +22,7 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 	URL cdmiServer;
 	Map<String, Object> parameters;
 	/* Username, Password */
-	Credentials creds;
+	Credentials credentials;
 
 	public CDMIConnectionWrapper(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		super(name);
@@ -35,8 +35,8 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 		/*
 		 * File format: http://silk.nih.gov/public/zzyzzap.@www.silk.types.html
 		 */
-		creds = new UsernamePasswordCredentials("aaa", "aaa");
-		cdmiConnection = new CDMIConnection(creds, cdmiServer);
+		credentials = new UsernamePasswordCredentials("aaa", "aaa");
+		cdmiConnection = new CDMIConnection(credentials, cdmiServer);
 	}
 
 }

@@ -1,5 +1,8 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIContentType.CDMI_CONTAINER;
+import static eu.venusc.cdmi.CDMIContentType.CDMI_SPEC_VERSION;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
@@ -9,20 +12,19 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.parser.ParseException;
-import static eu.venusc.cdmi.CDMIContentType.*;
 
 public class ContainerOperations {
 
 	private URL endpoint;
-	private DefaultHttpClient httpclient;
+	private HttpClient httpclient;
 
-	public ContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
+	public ContainerOperations(URL endpoint, HttpClient httpclient) {
 
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;

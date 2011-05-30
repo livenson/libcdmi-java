@@ -8,18 +8,18 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.parser.ParseException;
 
 public class NonCDMIContainerOperations {
 
 	private URL endpoint;
-	private DefaultHttpClient httpclient;
+	private HttpClient httpclient;
 
-	public NonCDMIContainerOperations(URL endpoint, DefaultHttpClient httpclient) {
+	public NonCDMIContainerOperations(URL endpoint, HttpClient httpclient) {
 		this.httpclient = httpclient;
 		this.endpoint = endpoint;
 	}
