@@ -17,7 +17,7 @@ If you intend to run the junit test cases, edit CDMIConnectionTest.java accordin
 your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionWrapper.java
 
 	cdmiServer: url to your server cdmiServer = new URL("http://hostname:port"); 	
-	credentials: your username/password
+  credentials = new UsernamePasswordCredentials("aaa", "aaa");
 
 Before isussing the following command make sure your vcdm server is up and running.
 	$ mvn install
