@@ -14,10 +14,10 @@ If you just want to build a jar, run the following command:
 	$ mvn install -DskipTests
 
 If you intend to run the junit test cases, edit CDMIConnectionTest.java according to
-your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionTest.java
+your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionWrapper.java
 
 	cdmiServer: url to your server cdmiServer = new URL("http://hostname:port"); 	
-	creds: your username/password
+	credentials: your username/password
 
 Before isussing the following command make sure your vcdm server is up and running.
 	$ mvn install
