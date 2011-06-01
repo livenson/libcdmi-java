@@ -34,7 +34,7 @@ public class ContainerOperations {
 			Map<String, Object> parameters) throws ClientProtocolException,
 			IOException, CDMIOperationException {
 
-		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteContainer) + "/");
+		HttpPut httpput = new HttpPut(endpoint+ remoteContainer + "/");
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
 		httpput.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
