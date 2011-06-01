@@ -256,7 +256,7 @@ public class Utils {
 		return file;
 	}
 
-	public static String urlBuilder(String path)
+	public static String allowFileNameWhiteSpace(String path)
 			throws UnsupportedEncodingException {
 
 		if (path.startsWith("/"))
