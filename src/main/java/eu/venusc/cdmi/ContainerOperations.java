@@ -51,7 +51,7 @@ public class ContainerOperations {
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteContainer) + "/");
+		HttpDelete httpdelete = new HttpDelete(endpoint+ remoteContainer + "/");
 		httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
@@ -59,7 +59,7 @@ public class ContainerOperations {
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
-		String path = endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteContainer) + "/?";
+		String path = endpoint+remoteContainer + "/?";
 
 		for (String f : fields) {
 			path = path + f;
