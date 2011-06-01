@@ -23,7 +23,7 @@ public class NonCDMIBlobOperations{
 
 	public HttpResponse create(String remoteFNM, byte[] value,
 			Map<String, Object> parameters) throws IOException {
-		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));
+		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
 
 		String contentType = parameters.get("mimetype") != null ? (String) parameters
 				.get("mimetype") : "text/plain";
@@ -35,12 +35,12 @@ public class NonCDMIBlobOperations{
 	}
 
 	public HttpResponse delete(String remoteFNM) throws IOException {		
-		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));
+		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
 		return httpclient.execute(httpdelete);
 	}
 
 	public HttpResponse read(String remoteFNM) throws IOException {		
-		HttpGet httpget = new HttpGet(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));		
+		HttpGet httpget = new HttpGet(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));		
 		return httpclient.execute(httpget);		
 	}
 }
