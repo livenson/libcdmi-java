@@ -27,13 +27,13 @@ public class NonCDMIContainerOperations {
 	public HttpResponse create(String remoteContainer,
 			Map<String, Object> parameters) throws ClientProtocolException,
 			IOException, CDMIOperationException {
-		HttpPut httpput = new HttpPut(endpoint + remoteContainer + "/");
+		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.urlBuilder(remoteContainer) + "/");
 		return httpclient.execute(httpput);
 	}
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
-		String path = endpoint.toString() + remoteContainer + "/" + "?";
+		String path = endpoint+ "/"+ Utils.urlBuilder(remoteContainer) + "/?";
 
 		for (String f : fields) {
 			path = path + f;
@@ -45,16 +45,13 @@ public class NonCDMIContainerOperations {
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer + "/");
+		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.urlBuilder(remoteContainer)+ "/");
 		return httpclient.execute(httpdelete);
 	}
 
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
-
-		String path = endpoint.toString();
-		path = path + remoteContainer;
 
 		List<String> fields = new ArrayList<String>();
 		fields.add("children");

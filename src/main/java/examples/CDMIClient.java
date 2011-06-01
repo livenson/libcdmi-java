@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -39,7 +40,7 @@ public class CDMIClient {
 	static String level1 = "/level1/";
 	static String level2 = "/level1/level2/";
 
-	public static void main(String[] args) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+	public static void main(String[] args) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, URISyntaxException {
 
 		try {
 			URL localFileBackend = new URL("http://localhost:2364");
@@ -230,7 +231,7 @@ public class CDMIClient {
 
 	static void prepareData(CDMIConnection localFileBackendConn,
 			CDMIConnection remoteAWSBackendConn, Map parameters)
-			throws IOException, CDMIOperationException {
+			throws IOException, CDMIOperationException, URISyntaxException {
 
 		System.out.println("Creating directories.. ");
 

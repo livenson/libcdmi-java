@@ -3,6 +3,7 @@ package eu.venusc.cdmi;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -77,7 +78,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testCreateText() throws ClientProtocolException, IOException,
-			CDMIOperationException {
+			CDMIOperationException, URISyntaxException {
 		this.parameters.put("mimetype", "text/plain");
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -98,7 +99,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testCreateBinary() throws ClientProtocolException, IOException,
-			CDMIOperationException {
+			CDMIOperationException, URISyntaxException {
 		this.parameters.put("mimetype", "application/x-zip-compressed");
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -119,7 +120,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testReadText() throws IOException, CDMIOperationException,
-			ParseException {
+			ParseException, URISyntaxException {
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -162,7 +163,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testReadBinary() throws IOException, CDMIOperationException,
-			ParseException {
+			ParseException, URISyntaxException {
 
 		this.parameters.put("mimetype", "application/x-zip-compressed");
 		HttpResponse response = cops.create(baseContainer + containerName,
@@ -206,7 +207,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 	}
 
 	@Test
-	public void testDelete() throws IOException, CDMIOperationException {
+	public void testDelete() throws IOException, CDMIOperationException, URISyntaxException {
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);

@@ -30,7 +30,7 @@ public abstract class CDMIConnectionWrapper extends TestCase {
 	}
 
 	protected void createConnection() throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-		cdmiServer = new URL("http://localhost:2364/");
+		cdmiServer = new URL("https://localhost:8080");
 		parameters = new HashMap<String, Object>();
 		/*
 		 * File format: http://silk.nih.gov/public/zzyzzap.@www.silk.types.html

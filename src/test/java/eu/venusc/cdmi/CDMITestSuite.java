@@ -12,7 +12,6 @@ public class CDMITestSuite extends TestSuite {
 		suite.addTestSuite(ContainerOperationsTest.class);
 		suite.addTestSuite(BlobOperationsTest.class);
 		suite.addTestSuite(NonCDMIContainerOperationsTest.class);
-
 		suite.addTestSuite(NonCDMIBlobOperationsTest.class);
 		return suite;
 	}

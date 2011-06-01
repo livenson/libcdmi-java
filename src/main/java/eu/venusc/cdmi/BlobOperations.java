@@ -30,7 +30,7 @@ public class BlobOperations{
 	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
 			throws IOException {
 
-		HttpPut httpput = new HttpPut(endpoint +  remoteFNM);
+		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));
 		httpput.setHeader("Content-Type", CDMI_OBJECT);
 		httpput.setHeader("Accept", CDMI_OBJECT);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -62,7 +62,7 @@ public class BlobOperations{
 	
 	public HttpResponse delete(String remoteFNM) throws IOException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + remoteFNM);
+		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));
 		httpdelete.setHeader("Content-Type", CDMI_OBJECT);
 		httpdelete.setHeader("Accept", CDMI_OBJECT);
 		httpdelete.setHeader("X-CDMI-Specification-Version",
@@ -74,7 +74,7 @@ public class BlobOperations{
 	
 	public HttpResponse read(String remoteFNM) throws IOException {
 
-		HttpGet httpget = new HttpGet(endpoint + remoteFNM);
+		HttpGet httpget = new HttpGet(endpoint+ "/"+ Utils.urlBuilder(remoteFNM));
 		httpget.setHeader("Accept", CDMI_OBJECT);
 		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",

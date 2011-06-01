@@ -26,7 +26,9 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	static String baseContainer;
 	static Random random = new Random();
 
-	public ContainerOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+	public ContainerOperationsTest(String name) throws KeyManagementException,
+			UnrecoverableKeyException, CertificateException,
+			NoSuchAlgorithmException, KeyStoreException, IOException {
 		super(name);
 		cops = cdmiConnection.getContainerProxy();
 	}
@@ -35,9 +37,9 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	public void setUp() throws IOException {
 
 		baseContainer = "/";
-		if (baseContainer.charAt(baseContainer.length()-1)!='/')
+		if (baseContainer.charAt(baseContainer.length() - 1) != '/')
 			baseContainer = baseContainer + "/";
-		
+
 		containerName = "libcdmi-java" + random.nextInt();
 	}
 
@@ -56,7 +58,8 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 					|| responseCode == REQUEST_DELETED)
 				continue;
 			else
-				fail("Container " + url + " could not be cleaned up." + responseCode);
+				fail("Container " + url + " could not be cleaned up."
+						+ responseCode);
 
 		}
 
@@ -69,8 +72,8 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container failed:" + baseContainer + containerName
-				+ "/", REQUEST_CREATED, responseCode);
+		assertEquals("Creating container failed:" + baseContainer
+				+ containerName + "/", REQUEST_CREATED, responseCode);
 
 	}
 
@@ -88,7 +91,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			if (responseCode != REQUEST_CREATED)
-				fail("Could not create  the container: " + baseContainer
+				fail("Could not create the container: " + baseContainer
 						+ containerName + "/");
 			set.add(containerName + i + "/");
 		}
@@ -109,7 +112,8 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 	public void testDelete() throws ClientProtocolException, IOException,
 			CDMIOperationException {
 		// Create a container
-		HttpResponse response = cops.create(baseContainer + containerName, parameters);
+		HttpResponse response = cops.create(baseContainer + containerName,
+				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
 
 		if (responseCode != REQUEST_CREATED)
@@ -118,7 +122,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 		// delete the container
 		response = cops.delete(baseContainer + containerName);
 		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Container could not be deleted: " + baseContainer + containerName,
-				REQUEST_DELETED, responseCode);
+		assertEquals("Container could not be deleted: " + baseContainer
+				+ containerName, REQUEST_DELETED, responseCode);
 	}
 }

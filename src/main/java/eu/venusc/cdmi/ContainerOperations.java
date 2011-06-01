@@ -34,7 +34,7 @@ public class ContainerOperations {
 			Map<String, Object> parameters) throws ClientProtocolException,
 			IOException, CDMIOperationException {
 
-		HttpPut httpput = new HttpPut(endpoint + remoteContainer);
+		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.urlBuilder(remoteContainer) + "/");
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
 		httpput.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
@@ -51,7 +51,7 @@ public class ContainerOperations {
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint + remoteContainer + "/");
+		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.urlBuilder(remoteContainer) + "/");
 		httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
@@ -59,7 +59,7 @@ public class ContainerOperations {
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException {
-		String path = endpoint.toString() + remoteContainer + "?";
+		String path = endpoint+ "/"+ Utils.urlBuilder(remoteContainer) + "/?";
 
 		for (String f : fields) {
 			path = path + f;
@@ -74,9 +74,6 @@ public class ContainerOperations {
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException {
-
-		String path = endpoint.toString();
-		path = path + remoteContainer;
 
 		List<String> fields = new ArrayList<String>();
 		fields.add("children");
