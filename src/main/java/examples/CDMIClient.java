@@ -1,8 +1,8 @@
 package examples;
 
-import java.io.BufferedWriter;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_READ;
+
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -24,8 +24,6 @@ import org.json.simple.parser.ParseException;
 import eu.venusc.cdmi.CDMIConnection;
 import eu.venusc.cdmi.CDMIOperationException;
 import eu.venusc.cdmi.Utils;
-
-import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
 public class CDMIClient {
 
@@ -238,7 +236,7 @@ public class CDMIClient {
 		HttpResponse response = localFileBackendConn.getContainerProxy()
 				.create(cdmiBase, parameters);
 		int responseCode = response.getStatusLine().getStatusCode();
-		System.out.println(cdmiBase + " created: " + responseCode);
+		System.out.println(cdmiBase + " created: " + responseCode);		
 
 		response = localFileBackendConn.getNonCdmiContainerProxy().create(
 				nonCdmiBase, parameters);
@@ -296,14 +294,13 @@ public class CDMIClient {
 	}
 
 	static void cleanUp(CDMIConnection conn) throws ClientProtocolException,
-			IOException, CDMIOperationException {
+			IOException, CDMIOperationException, URISyntaxException {
 		System.out.println("Cleanup " + conn.getEndpoint());
 
 		// delete cdmi
 		HttpResponse response = conn.getBlobProxy().delete(
 				level2 + "/input_1.local");
-		int responseCode = response.getStatusLine().getStatusCode();
-
+		int responseCode = response.getStatusLine().getStatusCode();		
 		response = conn.getBlobProxy().delete(level2 + "/input_2.local");
 		responseCode = response.getStatusLine().getStatusCode();
 

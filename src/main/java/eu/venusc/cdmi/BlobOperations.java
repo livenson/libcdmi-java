@@ -5,6 +5,7 @@ import static eu.venusc.cdmi.CDMIContentType.CDMI_SPEC_VERSION;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 public class BlobOperations{
 
@@ -28,9 +28,9 @@ public class BlobOperations{
 	}
 	
 	public HttpResponse create(String remoteFNM, byte[] value, Map <String, Object> parameters)
-			throws IOException {
+			throws IOException, URISyntaxException {
 
-		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
+		HttpPut httpput = new HttpPut(Utils.getURI(endpoint, remoteFNM));
 		httpput.setHeader("Content-Type", CDMI_OBJECT);
 		httpput.setHeader("Accept", CDMI_OBJECT);
 		httpput.setHeader("X-CDMI-Specification-Version",
@@ -60,9 +60,9 @@ public class BlobOperations{
 	}
 	
 	
-	public HttpResponse delete(String remoteFNM) throws IOException {
+	public HttpResponse delete(String remoteFNM) throws IOException, URISyntaxException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
+		HttpDelete httpdelete = new HttpDelete(Utils.getURI(endpoint, remoteFNM));
 		httpdelete.setHeader("Content-Type", CDMI_OBJECT);
 		httpdelete.setHeader("Accept", CDMI_OBJECT);
 		httpdelete.setHeader("X-CDMI-Specification-Version",
@@ -72,9 +72,9 @@ public class BlobOperations{
 	}
 	
 	
-	public HttpResponse read(String remoteFNM) throws IOException {
+	public HttpResponse read(String remoteFNM) throws IOException, URISyntaxException {
 
-		HttpGet httpget = new HttpGet(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
+		HttpGet httpget = new HttpGet(Utils.getURI(endpoint, remoteFNM));
 		httpget.setHeader("Accept", CDMI_OBJECT);
 		httpget.setHeader("Content-Type", CDMI_OBJECT);
 		httpget.setHeader("X-CDMI-Specification-Version",

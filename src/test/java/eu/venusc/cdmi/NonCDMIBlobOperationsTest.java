@@ -1,8 +1,12 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_CREATED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_DELETED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_NOT_FOUND;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -16,8 +20,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
 public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
@@ -57,7 +59,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 	}
 
 	@After
-	public void tearDown() throws IOException, CDMIOperationException {
+	public void tearDown() throws IOException, CDMIOperationException, URISyntaxException {
 		
 		for (String objectName: new String[] {textObjectName, binaryObjectName}) {
 		HttpResponse response = bops.delete(baseContainer + containerName + "/"
@@ -79,7 +81,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testCreateText() throws ClientProtocolException, IOException,
-	CDMIOperationException {
+	CDMIOperationException, URISyntaxException {
 		
 		this.parameters.put("mimetype", "text/plain");
 
@@ -102,7 +104,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testCreateBinary() throws ClientProtocolException, IOException,
-	CDMIOperationException {
+	CDMIOperationException, URISyntaxException {
 		
 		this.parameters.put("mimetype", "application/x-zip-compressed");
 
@@ -125,7 +127,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 	
 	@Test
 	public void testReadText() throws IOException, CDMIOperationException,
-			ParseException {
+			ParseException, URISyntaxException {
 		this.parameters.put("mimetype", "text/plain");
 
 		HttpResponse response = cops.create(baseContainer + containerName,
@@ -148,15 +150,15 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 		response = bops.read(baseContainer + containerName + "/" + textObjectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		String mimeType = response.getFirstHeader("Content-Type").getValue();
-
-			assertEquals("Local and remote blob objects are not equal: ",
+		assertEquals("Wrong mimetype", "text/plain", mimeType);
+		assertEquals("Local and remote blob objects are not equal: ",
 					new String(Utils.getBytesFromFile(tmpTextFile)), new String(
 							Utils.extractContents(response)));
 	}
 	
 	@Test
 	public void testReadBinary() throws IOException, CDMIOperationException,
-			ParseException {
+			ParseException, URISyntaxException {
 		this.parameters.put("mimetype", "application/x-zip-compressed");
 
 		HttpResponse response = cops.create(baseContainer + containerName,
@@ -179,14 +181,14 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 		response = bops.read(baseContainer + containerName + "/" + binaryObjectName);
 		responseCode = response.getStatusLine().getStatusCode();
 		String mimeType = response.getFirstHeader("Content-Type").getValue();
-
-			assertEquals("Local and remote blob objects are not equal: ",
+		assertEquals("Wrong mimetype", "application/x-zip-compressed", mimeType);
+		assertEquals("Local and remote blob objects are not equal: ",
 					new String(Utils.getBytesFromFile(tmpBinaryFile)), new String(
 							Utils.extractContents(response)));
 	}
 
 	@Test
-	public void testDelete() throws IOException, CDMIOperationException {
+	public void testDelete() throws IOException, CDMIOperationException, URISyntaxException {
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
 		int responseCode = response.getStatusLine().getStatusCode();

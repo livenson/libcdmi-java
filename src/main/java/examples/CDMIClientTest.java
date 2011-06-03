@@ -1,10 +1,11 @@
-package eu.venusc.cdmi;
+package examples;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -69,7 +70,7 @@ public class CDMIClientTest {
 		
 	}
 	
-	public static void main(String[] args) throws CDMIOperationException, ParseException {
+	public static void main(String[] args) throws CDMIOperationException, ParseException, URISyntaxException {
 
 		try {
 		//	URL localFileBackend = new URL("http://bscgrid05.bsc.es:20839");
@@ -105,7 +106,7 @@ public class CDMIClientTest {
 
 
 
-	public int readCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException{
+	public int readCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException, URISyntaxException{
 		HttpResponse response = conn.getBlobProxy().read(remoteFileName);
 		
 		int responseCode = response.getStatusLine().getStatusCode();
@@ -119,7 +120,7 @@ public class CDMIClientTest {
 		
 	}
 	
-	public int readNonCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException{
+	public int readNonCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException, URISyntaxException{
 		HttpResponse response = conn.getNonCdmiBlobProxy().read(remoteFileName);
 		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_READ)
@@ -136,7 +137,7 @@ public class CDMIClientTest {
 		return responseCode;
 	}
 	
-	public int createCdmiDir(CDMIConnection conn, Map parameters, String dirName) throws IOException, CDMIOperationException{
+	public int createCdmiDir(CDMIConnection conn, Map parameters, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
 		System.out.println("Creating directories.." + dirName);
 		
 		HttpResponse response = conn.getContainerProxy().create(dirName, parameters);
@@ -147,7 +148,7 @@ public class CDMIClientTest {
 
 	}
 	
-	public int createNonCdmiDir(CDMIConnection conn, Map parameters, String dirName) {
+	public int createNonCdmiDir(CDMIConnection conn, Map parameters, String dirName) throws URISyntaxException {
 		System.out.println("Creating directories.. ");
 		
 		HttpResponse response;
@@ -171,7 +172,7 @@ public class CDMIClientTest {
 
 	}
 	
-	public int uploadNonCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException{
+	public int uploadNonCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException, URISyntaxException{
 				
 		byte[] value = Utils.getBytesFromFile(new File(fileName));
 		HttpResponse response = conn.getNonCdmiBlobProxy().create(blobPath, value, parameters);
@@ -182,7 +183,7 @@ public class CDMIClientTest {
 		return responseCode;
 	}
 	
-	public int uploadCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException{
+	public int uploadCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException, URISyntaxException{
 		
 		byte[] value = Utils.getBytesFromFile(new File(fileName));
 		HttpResponse response = conn.getBlobProxy().create(blobPath, value, parameters);
@@ -193,49 +194,49 @@ public class CDMIClientTest {
 
 	}
 	
-	public int deleteCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException{
+	public int deleteCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
 		HttpResponse response = conn.getContainerProxy().delete(dirName);
 		int responseCode = response.getStatusLine().getStatusCode();
 
 		return responseCode;
 	}
 	
-	public int deleteNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException{
+	public int deleteNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
 		HttpResponse response = conn.getNonCdmiContainerProxy().delete(dirName);
 		int responseCode = response.getStatusLine().getStatusCode();
 
 		return responseCode;
 	}
 	
-	public void listCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException{
+	public void listCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException, URISyntaxException{
 		
 		for (String s : conn.getContainerProxy().getChildren(dirName)) {
 			System.out.println(s);
 		}
 	}
 	
-	public void listNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException{
+	public void listNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException, URISyntaxException{
 		
 		for (String s : conn.getNonCdmiContainerProxy().getChildren(dirName)) {
 			System.out.println(s);
 		}	
 	}
 
-	public int deleteCdmiFile(CDMIConnection conn, String fileName) throws IOException{
+	public int deleteCdmiFile(CDMIConnection conn, String fileName) throws IOException, URISyntaxException{
 		HttpResponse response = conn.getBlobProxy().delete(fileName);
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		return responseCode;
 	}
 
-	public int deleteNonCdmiFile(CDMIConnection conn, String fileName) throws IOException{
+	public int deleteNonCdmiFile(CDMIConnection conn, String fileName) throws IOException, URISyntaxException{
 		HttpResponse response = conn.getNonCdmiBlobProxy().delete(fileName);
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		return responseCode;
 	}
 	
-	public int uploadNonCdmiDir(File directory, boolean recurse, String dirDest)
+	public int uploadNonCdmiDir(File directory, boolean recurse, String dirDest) throws URISyntaxException
 	{
 		Map parameters = new HashMap();
 		parameters.put("mimetype", "text/plain");
@@ -251,7 +252,7 @@ public class CDMIClientTest {
 		return responseCode;
 	}
 
-	public int uploadDir(File directory, boolean recurse, String dirDest)
+	public int uploadDir(File directory, boolean recurse, String dirDest) throws URISyntaxException
 	{
 		// List of files / directories
 		//Vector<File> files = new Vector<File>();

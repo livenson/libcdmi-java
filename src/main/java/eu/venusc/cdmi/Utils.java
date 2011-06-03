@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.http.HttpResponse;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -255,18 +258,13 @@ public class Utils {
 		file.deleteOnExit();
 		return file;
 	}
-
-	public static String allowFileNameWhiteSpace(String path)
-			throws UnsupportedEncodingException {
-
-		if (path.startsWith("/"))
-			path = path.substring(1);
-
-		if (path.endsWith("/"))
-			path = path.substring(0, path.length() - 1);
-
-		String encoded = URLEncoder.encode(path, "UTF-8");
-		return encoded.replace("+", "%20");
+	
+	public static URI getURI(URL endpoint, String path) throws URISyntaxException, URIException {
+		return getURI(endpoint, path, false);	
 	}
-
+	
+	public static URI getURI(URL endpoint, String path, boolean endWithSlash) throws URISyntaxException, URIException {
+		String ending = endWithSlash ? "/" : "";
+		return new URI(endpoint.toString() + URIUtil.encodePathQuery(path) + ending);	
+	}	
 }

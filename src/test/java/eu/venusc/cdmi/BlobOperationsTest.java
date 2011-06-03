@@ -1,8 +1,11 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_CREATED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_DELETED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_NOT_FOUND;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -17,7 +20,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
 public class BlobOperationsTest extends CDMIConnectionWrapper {
 
@@ -49,12 +51,12 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 				"libcdmi-java", ".txt");
 		tmpBinaryFile = Utils.createZip("libcdmi-java");
 
-		textObjectName = tmpTextFile.getName();
+		textObjectName = tmpTextFile.getName() + "  aa";
 		binaryObjectName = tmpBinaryFile.getName();
 	}
 
 	@After
-	public void tearDown() throws IOException, CDMIOperationException {
+	public void tearDown() throws IOException, CDMIOperationException, URISyntaxException {
 		for (String objectName : new String[] { textObjectName,
 				binaryObjectName }) {
 			HttpResponse response = bops.delete(baseContainer + containerName

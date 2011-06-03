@@ -1,7 +1,11 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_CREATED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_DELETED;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_NOT_FOUND;
+
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +21,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
 public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
@@ -45,7 +48,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
 	@After
 	public void tearDown() throws IOException, ParseException,
-			CDMIOperationException {
+			CDMIOperationException, URISyntaxException {
 
 		String[] children = cops.getChildren(baseContainer);
 
@@ -67,7 +70,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testCreate() throws ClientProtocolException, IOException,
-			CDMIOperationException {
+			CDMIOperationException, URISyntaxException {
 
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);
@@ -79,7 +82,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testGetChildren() throws ClientProtocolException, IOException,
-			CDMIOperationException, ParseException {
+			CDMIOperationException, ParseException, URISyntaxException {
 
 		Set<String> set = new HashSet<String>();
 
@@ -110,7 +113,7 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
 
 	@Test
 	public void testDelete() throws ClientProtocolException, IOException,
-			CDMIOperationException {
+			CDMIOperationException, URISyntaxException {
 		// Create a container
 		HttpResponse response = cops.create(baseContainer + containerName,
 				parameters);

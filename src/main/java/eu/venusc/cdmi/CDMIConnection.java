@@ -58,23 +58,26 @@ public class CDMIConnection {
 			UnrecoverableKeyException {
 
 		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		// TODO: load server credentials
 		trustStore.load(null, null);
 
-		SSLSocketFactory factory = new CustomSSLSocketFactory(trustStore);
-		factory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		SSLSocketFactory blindTrustFactory = new CustomSSLSocketFactory(trustStore);
+		blindTrustFactory
+				.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
+		// XXX: very wierd - using deprecated constructor for Scheme it works. A suggested option 
+		// - with factory and default port interchanged - fails. 10min debugging didn't result in  
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory
 				.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", factory, 443));
-
+		schemeRegistry.register(new Scheme("https", blindTrustFactory, 8080));
 
 		ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
-		schemeRegistry);
+				schemeRegistry);
 		conMg.setMaxTotal(200);
 		conMg.setDefaultMaxPerRoute(20);
 
@@ -84,8 +87,9 @@ public class CDMIConnection {
 		httpclient = new DefaultHttpClient(conMg);
 
 		httpclient.getCredentialsProvider().setCredentials(
-		new AuthScope(endpoint.getHost(), endpoint.getPort()), credentials);
-		
+				new AuthScope(endpoint.getHost(), endpoint.getPort()),
+				credentials);
+
 		this.endpoint = endpoint;
 
 		this.blobProxy = new BlobOperations(endpoint, httpclient);

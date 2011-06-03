@@ -5,6 +5,7 @@ import static eu.venusc.cdmi.CDMIContentType.CDMI_SPEC_VERSION;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,9 @@ public class ContainerOperations {
 
 	public HttpResponse create(String remoteContainer,
 			Map<String, Object> parameters) throws ClientProtocolException,
-			IOException, CDMIOperationException {
+			IOException, CDMIOperationException, URISyntaxException {
 
-		HttpPut httpput = new HttpPut(endpoint+ remoteContainer + "/");
+		HttpPut httpput = new HttpPut(Utils.getURI(endpoint, remoteContainer, true));
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
 		httpput.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
@@ -49,22 +50,22 @@ public class ContainerOperations {
 	}
 
 	public HttpResponse delete(String remoteContainer)
-			throws ClientProtocolException, IOException, CDMIOperationException {
+			throws ClientProtocolException, IOException, CDMIOperationException, URISyntaxException {
 
-		HttpDelete httpdelete = new HttpDelete(endpoint+ remoteContainer + "/");
+		HttpDelete httpdelete = new HttpDelete(Utils.getURI(endpoint, remoteContainer, true));
 		httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
 		return httpclient.execute(httpdelete);
 	}
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
-			throws ClientProtocolException, IOException {
-		String path = endpoint+remoteContainer + "/?";
+			throws ClientProtocolException, IOException, URISyntaxException {
+		String path = remoteContainer + "/?";
 
 		for (String f : fields) {
 			path = path + f;
 		}
-		HttpGet httpget = new HttpGet(path);
+		HttpGet httpget = new HttpGet(Utils.getURI(endpoint, path));
 		httpget.setHeader("Accept", CDMI_CONTAINER);
 		httpget.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
 
@@ -73,7 +74,7 @@ public class ContainerOperations {
 
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
-			CDMIOperationException, ParseException {
+			CDMIOperationException, ParseException, URISyntaxException {
 
 		List<String> fields = new ArrayList<String>();
 		fields.add("children");

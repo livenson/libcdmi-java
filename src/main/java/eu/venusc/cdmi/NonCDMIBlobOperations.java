@@ -1,6 +1,7 @@
 package eu.venusc.cdmi;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
@@ -22,8 +23,8 @@ public class NonCDMIBlobOperations{
 	}
 
 	public HttpResponse create(String remoteFNM, byte[] value,
-			Map<String, Object> parameters) throws IOException {
-		HttpPut httpput = new HttpPut(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
+			Map<String, Object> parameters) throws IOException, URISyntaxException {
+		HttpPut httpput = new HttpPut(Utils.getURI(endpoint, remoteFNM));
 
 		String contentType = parameters.get("mimetype") != null ? (String) parameters
 				.get("mimetype") : "text/plain";
@@ -34,13 +35,13 @@ public class NonCDMIBlobOperations{
 		return httpclient.execute(httpput);
 	}
 
-	public HttpResponse delete(String remoteFNM) throws IOException {		
-		HttpDelete httpdelete = new HttpDelete(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));
+	public HttpResponse delete(String remoteFNM) throws IOException, URISyntaxException {		
+		HttpDelete httpdelete = new HttpDelete(Utils.getURI(endpoint, remoteFNM));
 		return httpclient.execute(httpdelete);
 	}
 
-	public HttpResponse read(String remoteFNM) throws IOException {		
-		HttpGet httpget = new HttpGet(endpoint+ "/"+ Utils.allowFileNameWhiteSpace(remoteFNM));		
+	public HttpResponse read(String remoteFNM) throws IOException, URISyntaxException {		
+		HttpGet httpget = new HttpGet(Utils.getURI(endpoint, remoteFNM));		
 		return httpclient.execute(httpget);		
 	}
 }
