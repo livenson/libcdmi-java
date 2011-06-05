@@ -78,11 +78,11 @@ public class CDMIConnection {
 
 		ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
 				schemeRegistry);
-		conMg.setMaxTotal(200);
-		conMg.setDefaultMaxPerRoute(20);
+		conMg.setMaxTotal(2000);
+		conMg.setDefaultMaxPerRoute(200);
 
 		HttpHost host = new HttpHost(endpoint.getHost(), 80);
-		conMg.setMaxForRoute(new HttpRoute(host), 50);
+		conMg.setMaxForRoute(new HttpRoute(host), 500);
 
 		httpclient = new DefaultHttpClient(conMg);
 
