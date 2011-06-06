@@ -1,6 +1,10 @@
-package examples;
+/*
+ * 
+ */
+package eu.venusc.cdmi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import java.io.IOException;
@@ -27,17 +31,29 @@ import eu.venusc.cdmi.Utils;
 
 import static eu.venusc.cdmi.CDMIResponseStatus.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CDMIClientTest.
+ */
 public class CDMIClientTest {
 
 	static URL localFileBackend;
+	
 	static Credentials creds;
+	
 	static CDMIConnection conn;
+	
 	static String dirname;
 	
-	CDMIClientTest()
+	/**
+	 * Instantiates a new CDMI test client.
+	 *
+	 * @param vcdm_endpoint URL of the CDMI server
+	 */
+	CDMIClientTest(String vcdm_endpoint)
 	{
 		try {
-			localFileBackend = new URL("http://bscgrid05.bsc.es:20839");
+			localFileBackend = new URL(vcdm_endpoint);
 			dirname = null;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -70,58 +86,91 @@ public class CDMIClientTest {
 		
 	}
 	
-	public static void main(String[] args) throws CDMIOperationException, ParseException, URISyntaxException {
+	/**
+	 * The main method.
+	 *
+	 * @param args The first argument is the VCDM server endpoint arguments
+	 */
+	public static void main(String[] args) {
 
-		try {
-		//	URL localFileBackend = new URL("http://bscgrid05.bsc.es:20839");
-			
+		// define custom parameters
+		Map parameters = new HashMap();
+		parameters.put("mimetype", "text/plain");
 
-			// define custom parameters
-			Map parameters = new HashMap();
-			parameters.put("mimetype", "text/plain");
 
 		
-			
-			CDMIClientTest client = new CDMIClientTest();
-			String dirname = "/venuscolb/";
-			
-			//client.listNonCdmiDir(client.conn, "/venuscolb/");
-		//	client.listCdmiDir(conn, "/");
-			client.readNonCdmiFile(conn,"/venuscolb/", "/Users/lezzi/venuscolb");
-		//	client.createNonCdmiDir(client.conn, parameters, "/venuscolb/");
-		//	client.uploadNonCdmi(conn, parameters, "/Users/lezzi/Documents/workspace/venusbes/venusbes.war", "/venuscolb/venusbes.war");
-			//client.readNonCdmiFile(conn, "/venuscolb/venusbes.war", "/Users/lezzi/test.war");
-			
-		//	client.uploadNonCdmiDir(new File("/Users/lezzi/Desktop/Model-4"), true, "/venuscolb");
-			client.listNonCdmiDir(conn, "/");
-
-		   } catch (MalformedURLException e) {
-               e.printStackTrace();
-       } catch (ClientProtocolException e) {
-               e.printStackTrace();
-       } catch (IOException e) {
-               e.printStackTrace();
-       } 
+		CDMIClientTest client = new CDMIClientTest(args[0]);
+		
+		//client.listNonCdmiDir(client.conn, "/venuscolb/");
+//	client.listCdmiDir(conn, "/");
+//	client.readNonCdmiFile(conn,"/venuscolb/", "/Users/lezzi/venuscolb");
+	//client.createNonCdmiDir(client.conn, parameters, "/venuscolb/");
+//	client.uploadNonCdmi(conn, parameters, "/Users/lezzi/Documents/workspace/venusbes/venusbes.war", "/venuscolb/venusbes.war");
+		//client.readNonCdmiFile(conn, "/venuscolb/venusbes.war", "/Users/lezzi/test.war");
+		
+//client.uploadNonCdmiDir(new File("/Users/lezzi/Desktop/Model-4"), true, "/venuscolb/");
+client.getNonCDMIDir("/venuscolb/", "/Users/lezzi/venuscolb"); 
 }
 
 
 
-	public int readCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException, URISyntaxException{
-		HttpResponse response = conn.getBlobProxy().read(remoteFileName);
+	/**
+	 * Read CDMI file.
+	 *
+	 * @param remoteFileName The remote file path
+	 * @param localFileName Absolute path of the local file
+	 * @return Returns an integer containing the http response code
+	 */
+	public int readCdmiFile(String remoteFileName, String localFileName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getBlobProxy().read(remoteFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_READ)
 			System.out.println("Download failed : " + remoteFileName +" response code: "+ responseCode);
 
-		File data1 = Utils.createFile(Utils.getTextContent(response), localFileName, ".txt");
+		File data1;
+		try {
+			data1 = Utils.createFile(Utils.getTextContent(response), localFileName, ".txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		System.out.println("File downloaded: " + data1.getAbsolutePath());
+		//System.out.println("File downloaded: " + data1.getAbsolutePath());
 		return responseCode;
 		
 	}
 	
-	public int readNonCdmiFile(CDMIConnection conn, String remoteFileName, String localFileName) throws IOException, ParseException, URISyntaxException{
-		HttpResponse response = conn.getNonCdmiBlobProxy().read(remoteFileName);
+	/**
+	 * Read non CDMI file.
+	 *
+	 * @param remoteFileName The remote file path
+	 * @param localFileName Absolute path of the local file
+	 * @return Returns an integer containing the http response code
+	 */
+	public int readNonCdmiFile(String remoteFileName, String localFileName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getNonCdmiBlobProxy().read(remoteFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		if (responseCode != REQUEST_READ)
 			System.out.println("Download failed : " + remoteFileName +" response code: "+ responseCode);
@@ -129,18 +178,58 @@ public class CDMIClientTest {
 	//	File data1 = Utils.createFile(Utils.getTextContent(response), localFileName, ".war");
 	
 		//System.out.println("File downloaded: " + data1.getAbsolutePath());
-		byte[] fileContent = Utils.extractContents(response);
-		FileOutputStream fileOut = new FileOutputStream(localFileName);
-		
-		fileOut.write(fileContent);
+		byte[] fileContent = null;
+		try {
+			fileContent = Utils.extractContents(response);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		FileOutputStream fileOut;
+		try {
+			fileOut = new FileOutputStream(localFileName);
+			fileOut.write(fileContent);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return responseCode;
 	}
 	
-	public int createCdmiDir(CDMIConnection conn, Map parameters, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
+	/**
+	 * Creates a remote CDMI directory
+	 *
+	 * @param parameters A Map object containing "mimetype", "text/plain" like parameters 
+	 * @param dirName Path of the remote directory
+	 * @return Returns an integer containing the http response code
+	 */
+	public int createCdmiDir(Map parameters, String dirName) {
 		System.out.println("Creating directories.." + dirName);
 		
-		HttpResponse response = conn.getContainerProxy().create(dirName, parameters);
+		HttpResponse response = null;
+		try {
+			response = conn.getContainerProxy().create(dirName, parameters);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		System.out.println(dirName + " created: "+ responseCode);
 		
@@ -148,7 +237,14 @@ public class CDMIClientTest {
 
 	}
 	
-	public int createNonCdmiDir(CDMIConnection conn, Map parameters, String dirName) throws URISyntaxException {
+	/**
+	 * Creates a remote non CDMI directory
+	 *
+	 * @param parameters A Map object containing "mimetype", "text/plain" like parameters
+	 * @param dirName Path of the remote directory
+	 * @return Returns an integer containing the http response code
+	 */
+	public int createNonCdmiDir(Map parameters, String dirName) {
 		System.out.println("Creating directories.. ");
 		
 		HttpResponse response;
@@ -165,6 +261,9 @@ public class CDMIClientTest {
 			e.printStackTrace();
 		} catch (CDMIOperationException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		System.out.println(dirName + " created: "+ responseCode);
 		
@@ -172,10 +271,28 @@ public class CDMIClientTest {
 
 	}
 	
-	public int uploadNonCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException, URISyntaxException{
-				
-		byte[] value = Utils.getBytesFromFile(new File(fileName));
-		HttpResponse response = conn.getNonCdmiBlobProxy().create(blobPath, value, parameters);
+	/**
+	 * Upload a non CDMI file.
+	 *
+	 * @param parameters the parameters
+	 * @param fileName the file name
+	 * @param blobPath Path of the remote directory where the file has to be uploaded
+	 * @return Returns an integer containing the http response code
+	 */
+	public int uploadNonCdmi(Map parameters, String fileName, String blobPath) {
+		HttpResponse response = null;
+	
+		byte[] value;
+		try {
+			value = Utils.getBytesFromFile(new File(fileName));
+			response = conn.getNonCdmiBlobProxy().create(blobPath, value, parameters);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		System.out.println(blobPath+ " created: "+ responseCode);
@@ -183,10 +300,29 @@ public class CDMIClientTest {
 		return responseCode;
 	}
 	
-	public int uploadCdmi(CDMIConnection conn, Map parameters, String fileName, String blobPath) throws IOException, CDMIOperationException, URISyntaxException{
-		
-		byte[] value = Utils.getBytesFromFile(new File(fileName));
-		HttpResponse response = conn.getBlobProxy().create(blobPath, value, parameters);
+	/**
+	 * Upload CDMI file.
+	 *
+	 * @param parameters A Map object containing "mimetype", "text/plain" like parameters
+	 * @param fileName Absolute path of the file to be uploaded
+	 * @param blobPath Path of the remote directory where the file has to be uploaded
+	 * @return Returns an integer containing the http response code
+	 */
+	public int uploadCdmi(Map parameters, String fileName, String blobPath) {
+		HttpResponse response = null;
+
+		byte[] value;
+		try {
+			value = Utils.getBytesFromFile(new File(fileName));
+			response = conn.getBlobProxy().create(blobPath, value, parameters);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		System.out.println(blobPath+ " created: "+ responseCode);
@@ -194,57 +330,192 @@ public class CDMIClientTest {
 
 	}
 	
-	public int deleteCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
-		HttpResponse response = conn.getContainerProxy().delete(dirName);
+	/**
+	 * Delete a remote CDMI directory.
+	 *
+	 * @param dirName Path of the remote directory to be deleted
+	 * @return Returns an integer containing the http response code
+	 * 
+	 */
+	public int deleteCdmiDir(String dirName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getContainerProxy().delete(dirName);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 
 		return responseCode;
 	}
 	
-	public int deleteNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, URISyntaxException{
-		HttpResponse response = conn.getNonCdmiContainerProxy().delete(dirName);
+	/**
+	 * Delete a non CDMI directory.
+	 *
+	 * @param conn A eu.venusc.cdmi.CDMIConnection object
+	 * @param dirName Path of the remote directory to be deleted
+	 * @return Returns an integer containing the http response code
+	 */
+	public int deleteNonCdmiDir(String dirName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getNonCdmiContainerProxy().delete(dirName);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 
 		return responseCode;
 	}
 	
-	public void listCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException, URISyntaxException{
+	/**
+	 * List the content of a CDMI directory.
+	 * 
+	 * @param dirName Path of the remote directory to be listed
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void listCdmiDir(String dirName) {
 		
-		for (String s : conn.getContainerProxy().getChildren(dirName)) {
-			System.out.println(s);
+		try {
+			for (String s : conn.getContainerProxy().getChildren(dirName)) {
+				System.out.println(s);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	public void listNonCdmiDir(CDMIConnection conn, String dirName) throws IOException, CDMIOperationException, ParseException, URISyntaxException{
+	/**
+	 * List the content of a non CDMI directory.
+	 *
+	 * @param dirName Path of the remote directory to be listed
+	 * @throws IOException Signals that an I/O exception has occurred
+	 */
+	public void listNonCdmiDir(String dirName) {
 		
-		for (String s : conn.getNonCdmiContainerProxy().getChildren(dirName)) {
-			System.out.println(s);
+		try {
+			for (String s : conn.getNonCdmiContainerProxy().getChildren(dirName)) {
+				System.out.println(s);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}	
 	}
 
-	public int deleteCdmiFile(CDMIConnection conn, String fileName) throws IOException, URISyntaxException{
-		HttpResponse response = conn.getBlobProxy().delete(fileName);
+	/**
+	 * Delete a CDMI file.
+	 *
+	 * @param fileName Path of the remote file name to be deleted
+	 * @return Returns an integer containing the http response code
+	 * 
+	 */
+	public int deleteCdmiFile(String fileName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getBlobProxy().delete(fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		return responseCode;
 	}
 
-	public int deleteNonCdmiFile(CDMIConnection conn, String fileName) throws IOException, URISyntaxException{
-		HttpResponse response = conn.getNonCdmiBlobProxy().delete(fileName);
+	/**
+	 * Delete a non CDMI file.
+	 *
+	 * @param fileName Path of the remote file name to be deleted
+	 * @return Returns an integer containing the http response code
+	 */
+	public int deleteNonCdmiFile(String fileName) {
+		HttpResponse response = null;
+		try {
+			response = conn.getNonCdmiBlobProxy().delete(fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int responseCode = response.getStatusLine().getStatusCode();
 		
 		return responseCode;
 	}
 	
-	public int uploadNonCdmiDir(File directory, boolean recurse, String dirDest) throws URISyntaxException
+	/**
+	 * Upload a non CDMI directory.
+	 *
+	 * @param directory the directory
+	 * @param recurse the recurse
+	 * @param dirDest the dir dest
+	 * @return the int
+	 */
+	public int uploadNonCdmiDir(File directory, boolean recurse, String dirDest)
 	{
 		Map parameters = new HashMap();
 		parameters.put("mimetype", "text/plain");
 		
 		dirname = dirDest + "/" + directory.getName();
-		this.createNonCdmiDir(conn, parameters, "/" + dirname +"/");
+		this.createNonCdmiDir(parameters, "/" + dirname +"/");
 
-		int responseCode = this.uploadDir(directory, recurse, dirname);
+		int responseCode = 0;
+		try {
+			responseCode = this.uploadDir(directory, recurse, dirname);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	//Java4: Collection files = listFiles(directory, filter, recurse);
 		
 		//File[] arr = new File[files.size()];
@@ -252,7 +523,15 @@ public class CDMIClientTest {
 		return responseCode;
 	}
 
-	public int uploadDir(File directory, boolean recurse, String dirDest) throws URISyntaxException
+	/**
+	 * Upload dir.
+	 *
+	 * @param directory the directory
+	 * @param recurse the recurse
+	 * @param dirDest the dir dest
+	 * @return the int
+	 */
+	public int uploadDir(File directory, boolean recurse, String dirDest) throws IOException
 	{
 		// List of files / directories
 		//Vector<File> files = new Vector<File>();
@@ -274,30 +553,93 @@ public class CDMIClientTest {
 				System.out.println("Directory: "+ entry.getName());
 				if (entry.getName() != ".." && entry.getName() != ".")
 				{
-					dirDest = dirDest + "/" + entry.getName();
-					responseCode = this.createNonCdmiDir(conn, parameters, "/" + entry.getName()+"/");
-					//files.addAll(uploadDir(entry, recurse, dirDest));
+					//dirDest = dirDest + "/" + entry.getName();
+					responseCode = this.createNonCdmiDir(parameters, "/" + dirDest + "/" + entry.getName());
+					uploadDir(entry, recurse, dirDest + "/" + entry.getName());
 				}
 			}
 			else
 			{
-				try {
-					dirname = dirDest + "/" + entry.getName();
+				dirname = dirDest + "/" + entry.getName();
 
-					System.out.println("Copying: " + entry.getAbsolutePath() + " to " + dirname);
+				System.out.println("Copying: " + entry.getAbsolutePath() + " to " + dirname);
 
-					responseCode = this.uploadNonCdmi(conn, parameters, entry.getAbsolutePath(), dirname);
-				
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (CDMIOperationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				responseCode = this.uploadNonCdmi(parameters, entry.getAbsolutePath(), dirname);
 			}
 		}
 		
 		return responseCode;		
 	}	
+	
+	/**
+	 * Download a non CDMI directory.
+	 *
+	 * @param remoteDirName Path of the remote directory
+	 * @param localPath Absolute path of the local directory
+	 * @return Returns 0 on success, -1 on error
+	 */
+	int getNonCDMIDir(String remoteDirName, String localPath){
+		 try {
+			 // If localPat doesn't exist, create it
+			File localDir = new File(localPath);
+			boolean success = false;
+			if (!localDir.exists())
+				success = (new File(localPath)).mkdir();
+			
+			// Create locally the remote directory
+			localDir = new File(localPath + remoteDirName);
+			if (!localDir.exists())
+				success = (new File(localPath + remoteDirName)).mkdir();
+			
+			System.out.println("Looking directory: " + remoteDirName);
+
+			String[] files = conn.getNonCdmiContainerProxy().getChildren(remoteDirName);
+			for (String file : files)
+			{
+				System.out.println(file);
+
+				if (file.endsWith("/"))
+				{
+					System.out.println("Creating directory: " + localPath + remoteDirName + file);
+
+					localDir = new File(localPath + remoteDirName + file);
+					if(!localDir.exists()) {
+						success = (new File(localPath + remoteDirName + file)).mkdir();
+					if (!success) {
+						System.out.println("Error creating directory: " + localPath + remoteDirName + file);
+						return -1;
+					}
+					}
+					this.getNonCDMIDir(remoteDirName + "/" + file, localPath);				
+
+				}
+				else
+				{
+					String remoteFileName = remoteDirName + "/" + file;
+					System.out.println("Downloading file " + remoteFileName + " to " + localPath + "/" + remoteDirName + "/" + file);
+					this.readNonCdmiFile(remoteFileName, localPath + "/" + remoteDirName + "/" + file);
+				}
+					
+			}
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMIOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		 return 0;
+		 
+	}
 }
