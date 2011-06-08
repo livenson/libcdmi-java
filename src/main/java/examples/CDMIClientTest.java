@@ -1,7 +1,7 @@
 /*
  * 
  */
-package eu.venusc.cdmi;
+package examples;
 
 import java.io.File;
 import java.io.FileNotFoundException;
