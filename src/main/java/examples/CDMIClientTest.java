@@ -139,7 +139,7 @@ client.getNonCDMIDir("/venuscolb/", "/Users/lezzi/venuscolb");
 
 		File data1;
 		try {
-			data1 = Utils.createFile(Utils.getTextContent(response), localFileName, ".txt");
+			data1 = Utils.createTemporaryFile(Utils.getTextContent(response), localFileName, ".txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

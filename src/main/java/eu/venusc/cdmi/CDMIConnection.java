@@ -1,6 +1,10 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_READ;
+
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -10,6 +14,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
@@ -25,6 +30,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
+import org.json.simple.parser.ParseException;
 
 public class CDMIConnection {
 
@@ -61,7 +67,8 @@ public class CDMIConnection {
 		// TODO: load server credentials
 		trustStore.load(null, null);
 
-		SSLSocketFactory blindTrustFactory = new CustomSSLSocketFactory(trustStore);
+		SSLSocketFactory blindTrustFactory = new CustomSSLSocketFactory(
+				trustStore);
 		blindTrustFactory
 				.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
@@ -70,11 +77,13 @@ public class CDMIConnection {
 		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		// XXX: very wierd - using deprecated constructor for Scheme it works. A suggested option 
-		// - with factory and default port interchanged - fails. 10min debugging didn't result in  
+		// XXX: very wierd - using deprecated constructor for Scheme it works. A
+		// suggested option
+		// - with factory and default port interchanged - fails. 10min debugging
+		// didn't result in
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", blindTrustFactory, 8080));
+				.getSocketFactory(), endpoint.getPort()));
+		schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint.getPort()));
 
 		ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
 				schemeRegistry);
@@ -98,17 +107,8 @@ public class CDMIConnection {
 				httpclient);
 		this.nonCdmiBlobProxy = new NonCDMIBlobOperations(endpoint, httpclient);
 	}
-
-	public URL getEndpoint() {
-		return endpoint;
-	}
-
-	public void setEndpoint(URL endpoint) {
-		this.endpoint = endpoint;
-
-	}
-
-	public HttpClient getHttpclient() {
+	
+	public DefaultHttpClient getHttpclient() {
 		return httpclient;
 	}
 
@@ -132,4 +132,11 @@ public class CDMIConnection {
 		this.containerProxy = containerProxy;
 	}
 
+	public URL getEndpoint() {
+		return endpoint;
+	}
+
+	public void setEndpoint(URL endpoint) {
+		this.endpoint = endpoint;
+	}
 }

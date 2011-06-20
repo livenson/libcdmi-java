@@ -47,7 +47,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
 		containerName = "libcdmi-java" + random.nextInt();
 
-		tmpTextFile = Utils.createFile("Place for advertisment.",
+		tmpTextFile = Utils.createTemporaryFile("Place for advertisment.",
 				"libcdmi-java", ".txt");
 		tmpBinaryFile = Utils.createZip("libcdmi-java");
 

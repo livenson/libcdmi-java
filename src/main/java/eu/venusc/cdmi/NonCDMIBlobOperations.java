@@ -1,5 +1,8 @@
 package eu.venusc.cdmi;
 
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_READ;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,6 +14,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
+import org.json.simple.parser.ParseException;
 
 public class NonCDMIBlobOperations{
 
@@ -43,5 +47,30 @@ public class NonCDMIBlobOperations{
 	public HttpResponse read(String remoteFNM) throws IOException, URISyntaxException {		
 		HttpGet httpget = new HttpGet(Utils.getURI(endpoint, remoteFNM));		
 		return httpclient.execute(httpget);		
+	}
+	
+	/**
+	 * Read non-CDMI blob and save the contents to a file.
+	 * 
+	 * @param remoteFileName
+	 *            The remote file path
+	 * @param localFileName
+	 *            Absolute path of the local file
+	 * @return Returns an integer containing the HTTP response code
+	 */
+	public int readToFile (String remoteFileName, String localFileName)
+			throws IOException, URISyntaxException, CDMIOperationException, ParseException {
+		HttpResponse response = read(remoteFileName);
+
+		int responseCode = response.getStatusLine().getStatusCode();
+		if (responseCode != REQUEST_READ)
+			throw new CDMIOperationException("Download failed : "
+					+ remoteFileName, responseCode);
+					
+		FileOutputStream outputFile = new FileOutputStream(localFileName);
+		outputFile.write(Utils.extractContents(response));
+		outputFile.close();
+
+		return responseCode;
 	}
 }

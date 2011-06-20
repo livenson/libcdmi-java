@@ -202,7 +202,7 @@ public class Utils {
 
 	}
 
-	public static File createFile(String content, String prefix, String suffix)
+	public static File createTemporaryFile(String content, String prefix, String suffix)
 			throws IOException {
 
 		File tempFile = File.createTempFile(prefix, suffix);
@@ -236,7 +236,7 @@ public class Utils {
 	public static File createZip(String zipname) throws IOException {
 
 		byte[] buf = new byte[2048];
-		File file = Utils.createFile("Put your data here to be zipped.",
+		File file = Utils.createTemporaryFile("Put your data here to be zipped.",
 				"libcdmi-java", ".txt");
 		FileInputStream fis = new FileInputStream(file);
 		fis.read(buf, 0, buf.length);

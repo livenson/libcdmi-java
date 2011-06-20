@@ -49,7 +49,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
 
 		containerName = "noncdmi-container" + random.nextInt();
 
-		tmpTextFile = Utils.createFile("Place for advertisment.", "venus_C",
+		tmpTextFile = Utils.createTemporaryFile("Place for advertisment.", "venus_C",
 		".txt");
 		
 		tmpBinaryFile = Utils.createZip("venus_c");

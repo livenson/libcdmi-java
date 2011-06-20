@@ -74,7 +74,7 @@ public class CDMIClient {
 				System.out.println("Download failed : " + cdmiBase
 						+ "input_1.txt" + " response code: " + responseCode);
 
-			File data1 = Utils.createFile(Utils.getTextContent(response),
+			File data1 = Utils.createTemporaryFile(Utils.getTextContent(response),
 					"input_1", ".local");
 			System.out.println("File downloaded: " + data1.getAbsolutePath());
 
@@ -85,7 +85,7 @@ public class CDMIClient {
 				System.out.println("Download faild : " + cdmiBase
 						+ "input_2.txt");
 
-			File data2 = Utils.createFile(Utils.getTextContent(response),
+			File data2 = Utils.createTemporaryFile(Utils.getTextContent(response),
 					"input_2", ".local");
 			System.out.println("File downloaded: " + data2.getAbsolutePath());
 
@@ -108,7 +108,7 @@ public class CDMIClient {
 			 * data
 			 */
 
-			File data3 = Utils.createFile(
+			File data3 = Utils.createTemporaryFile(
 					new String(Utils.extractContents(response)),
 					"noncdmi_input_1", ".local");
 			System.out.println("File downloaded: " + data3.getAbsolutePath());
@@ -120,7 +120,7 @@ public class CDMIClient {
 				System.out.println("Download faild : " + nonCdmiBase
 						+ "noncdmi_input_2");
 
-			File data4 = Utils.createFile(
+			File data4 = Utils.createTemporaryFile(
 					new String(Utils.extractContents(response)),
 					"noncdmi_input_2", ".local");
 			System.out.println("File downloaded: " + data4.getAbsolutePath());
@@ -254,7 +254,7 @@ public class CDMIClient {
 		System.out.println(nonCdmiBase + " created: " + responseCode);
 
 		System.out.println("Uploading sample cdmi data");
-		File tempFile = Utils.createFile("local file from the laptop",
+		File tempFile = Utils.createTemporaryFile("local file from the laptop",
 				"venus_c", "demo");
 
 		String blobPath = cdmiBase + "input_1.txt";
@@ -265,7 +265,7 @@ public class CDMIClient {
 
 		System.out.println(blobPath + " created: " + responseCode);
 
-		tempFile = Utils.createFile("remote file on AWS", "venus_c", "demo");
+		tempFile = Utils.createTemporaryFile("remote file on AWS", "venus_c", "demo");
 		blobPath = cdmiBase + "input_2.txt";
 		response = remoteAWSBackendConn.getBlobProxy().create(blobPath, value,
 				parameters);
@@ -274,7 +274,7 @@ public class CDMIClient {
 
 		System.out.println("Uploading sample non cdmi data");
 
-		tempFile = Utils.createFile("local non cdmi data from the laptop",
+		tempFile = Utils.createTemporaryFile("local non cdmi data from the laptop",
 				"venus_c", "demo");
 		blobPath = nonCdmiBase + "noncdmi_input_1.dat";
 		value = Utils.getBytesFromFile(tempFile);
@@ -283,7 +283,7 @@ public class CDMIClient {
 		responseCode = response.getStatusLine().getStatusCode();
 		System.out.println(blobPath + " created: " + responseCode);
 
-		tempFile = Utils.createFile("remote non cdmi data on AWS", "venus_c",
+		tempFile = Utils.createTemporaryFile("remote non cdmi data on AWS", "venus_c",
 				"demo");
 		blobPath = nonCdmiBase + "noncdmi_input_2.dat";
 		response = remoteAWSBackendConn.getNonCdmiBlobProxy().create(blobPath,
