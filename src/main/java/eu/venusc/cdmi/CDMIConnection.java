@@ -1,6 +1,6 @@
 package eu.venusc.cdmi;
 
-import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_READ;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_OK;
 
 import java.io.File;
 import java.io.IOException;

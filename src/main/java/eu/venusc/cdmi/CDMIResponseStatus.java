@@ -3,7 +3,7 @@ package eu.venusc.cdmi;
 public interface CDMIResponseStatus {
 
 	/** Valid response is enclosed. 200*/
-	public static final int REQUEST_READ = 200;
+	public static final int REQUEST_OK = 200;
 	/** New container or data object was created. 201*/
 	public static final int REQUEST_CREATED = 201;
 	/**

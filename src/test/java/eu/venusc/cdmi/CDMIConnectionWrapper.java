@@ -16,23 +16,23 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
 public abstract class CDMIConnectionWrapper extends TestCase {
-	CDMIConnection cdmiConnection;
-	/* CDMI Server url */
-	URL cdmiServer;
-	Map<String, Object> parameters;
-	/* Username, Password */
-	Credentials credentials;
+    CDMIConnection cdmiConnection;
+    /* CDMI Server url */
+    URL cdmiServer;
+    Map<String, Object> parameters;
+    /* Username, Password */
+    Credentials credentials;
 
-	public CDMIConnectionWrapper(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-		super(name);
-		this.createConnection();
-	}
+    public CDMIConnectionWrapper(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        super(name);
+        this.createConnection();
+    }
 
-	protected void createConnection() throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-		cdmiServer = new URL("https://localhost:8080");
-		parameters = new HashMap<String, Object>();
-		credentials = new UsernamePasswordCredentials("aaa", "aaa");
-		cdmiConnection = new CDMIConnection(credentials, cdmiServer);
-	}
+    protected void createConnection() throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        cdmiServer = new URL("http://cdmi.pdc2.pdc.kth.se:2364/");
+        parameters = new HashMap<String, Object>();
+        credentials = new UsernamePasswordCredentials("christian", "venusc");
+        cdmiConnection = new CDMIConnection(credentials, cdmiServer);
+    }
 
 }

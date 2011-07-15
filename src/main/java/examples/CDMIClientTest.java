@@ -134,7 +134,7 @@ client.getNonCDMIDir("/venuscolb/", "/Users/lezzi/venuscolb");
 		}
 		
 		int responseCode = response.getStatusLine().getStatusCode();
-		if (responseCode != REQUEST_READ)
+		if (responseCode != REQUEST_OK)
 			System.out.println("Download failed : " + remoteFileName +" response code: "+ responseCode);
 
 		File data1;
@@ -172,7 +172,7 @@ client.getNonCDMIDir("/venuscolb/", "/Users/lezzi/venuscolb");
 			e.printStackTrace();
 		}
 		int responseCode = response.getStatusLine().getStatusCode();
-		if (responseCode != REQUEST_READ)
+		if (responseCode != REQUEST_OK)
 			System.out.println("Download failed : " + remoteFileName +" response code: "+ responseCode);
 
 	//	File data1 = Utils.createFile(Utils.getTextContent(response), localFileName, ".war");

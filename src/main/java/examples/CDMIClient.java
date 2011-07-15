@@ -1,6 +1,6 @@
 package examples;
 
-import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_READ;
+import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_OK;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class CDMIClient {
 					cdmiBase + "input_1.txt");
 
 			int responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != REQUEST_READ)
+			if (responseCode != REQUEST_OK)
 				System.out.println("Download failed : " + cdmiBase
 						+ "input_1.txt" + " response code: " + responseCode);
 
@@ -81,7 +81,7 @@ public class CDMIClient {
 			response = remoteAWSBackendConn.getBlobProxy().read(
 					cdmiBase + "input_2.txt");
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != REQUEST_READ)
+			if (responseCode != REQUEST_OK)
 				System.out.println("Download faild : " + cdmiBase
 						+ "input_2.txt");
 
@@ -99,7 +99,7 @@ public class CDMIClient {
 					nonCdmiBase + "noncdmi_input_1.dat");
 			responseCode = response.getStatusLine().getStatusCode();
 
-			if (responseCode != REQUEST_READ)
+			if (responseCode != REQUEST_OK)
 				System.out.println("Download faild : " + cdmiBase + "/"
 						+ "noncdmi_input_1");
 
@@ -116,7 +116,7 @@ public class CDMIClient {
 			response = remoteAWSBackendConn.getBlobProxy().read(
 					nonCdmiBase + "noncdmi_input_2.dat");
 			responseCode = response.getStatusLine().getStatusCode();
-			if (responseCode != REQUEST_READ)
+			if (responseCode != REQUEST_OK)
 				System.out.println("Download faild : " + nonCdmiBase
 						+ "noncdmi_input_2");
 
