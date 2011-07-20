@@ -83,10 +83,8 @@ public class NonCDMIBlobOperations{
 
 
         FileOutputStream outputFile = new FileOutputStream(localFileName);
-        Utils.copyStreamData(response.getEntity().getContent(), outputFile);
-        //outputFile.write(Utils.extractContents(response));
+        response.getEntity().writeTo(outputFile);
         outputFile.close();
-
         return responseCode;
     }
 }
