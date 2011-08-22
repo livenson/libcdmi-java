@@ -25,4 +25,4 @@ your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionWrapper.j
 Before isussing the following command make sure your vcdm server is up and running.
 	$ mvn install
 
-This will produce a jar file called: libcdmi-1.0.jar in target folder.
+This will produce a jar file called: cdmi-1.0.jar in target folder.
