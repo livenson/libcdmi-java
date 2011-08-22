@@ -1,10 +1,6 @@
 package eu.venusc.cdmi;
 
-import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_OK;
-
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -14,11 +10,10 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
-import org.apache.http.client.HttpClient;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -30,7 +25,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
-import org.json.simple.parser.ParseException;
 
 public class CDMIConnection {
 
@@ -40,6 +34,7 @@ public class CDMIConnection {
 	private NonCDMIContainerOperations nonCdmiContainerProxy;
 	private NonCDMIBlobOperations nonCdmiBlobProxy;
 	private URL endpoint;
+	private Credentials credentials;
 
 	public NonCDMIBlobOperations getNonCdmiBlobProxy() {
 		return nonCdmiBlobProxy;
@@ -58,11 +53,12 @@ public class CDMIConnection {
 		this.nonCdmiContainerProxy = nonCdmiContainerProxy;
 	}
 
-	public CDMIConnection(Credentials credentials, URL endpoint)
+	public CDMIConnection(String username, String passwd, URL endpoint)
 			throws CertificateException, NoSuchAlgorithmException,
 			KeyManagementException, IOException, KeyStoreException,
 			UnrecoverableKeyException {
-
+		
+		credentials = new UsernamePasswordCredentials(username, passwd);
 		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 		// TODO: load server credentials
 		trustStore.load(null, null);

@@ -39,7 +39,6 @@ public class CDMIClientTest {
 
 	static URL localFileBackend;
 	
-	static Credentials creds;
 	
 	static CDMIConnection conn;
 	
@@ -59,10 +58,10 @@ public class CDMIClientTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		creds = new UsernamePasswordCredentials("aaa", "aaa");
+		
 
 		try {
-			conn = new CDMIConnection(creds,	localFileBackend);
+			conn = new CDMIConnection("aaa", "aaa", localFileBackend);
 			
 		} catch (KeyManagementException e) {
 			// TODO Auto-generated catch block

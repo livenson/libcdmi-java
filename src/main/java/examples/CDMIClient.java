@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.json.simple.parser.ParseException;
 
@@ -38,7 +36,7 @@ public class CDMIClient {
 	static String level1 = "/level1/";
 	static String level2 = "/level1/level2/";
 
-	public static void main(String[] args) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, URISyntaxException {
+	public static void main(String[] args) throws UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, URISyntaxException, KeyManagementException {
 
 		try {
 			URL localFileBackend = new URL("http://localhost:2364");
@@ -51,13 +49,12 @@ public class CDMIClient {
 			Map parameters = new HashMap();
 			parameters.put("mimetype", "text/plain");
 
-			Credentials creds = new UsernamePasswordCredentials("aaa", "aaa");
 
-			CDMIConnection localFileBackendConn = new CDMIConnection(creds,
+			CDMIConnection localFileBackendConn = new CDMIConnection("aaa","aaa",
 					localFileBackend);
-			CDMIConnection remoteAWSBackendConn = new CDMIConnection(creds,
+			CDMIConnection remoteAWSBackendConn = new CDMIConnection("aaa","aaa",
 					remoteAWSBackend);
-			CDMIConnection pdcStorageConn = new CDMIConnection(creds,
+			CDMIConnection pdcStorageConn = new CDMIConnection("aaa","aaa",
 					pdcStorage);
 
 			// upload some data for the demo
