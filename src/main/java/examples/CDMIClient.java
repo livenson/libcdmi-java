@@ -15,7 +15,10 @@ import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.json.simple.parser.ParseException;
 
@@ -50,13 +53,15 @@ public class CDMIClient {
 			parameters.put("mimetype", "text/plain");
 
 
-			CDMIConnection localFileBackendConn = new CDMIConnection("aaa","aaa",
-					localFileBackend);
-			CDMIConnection remoteAWSBackendConn = new CDMIConnection("aaa","aaa",
-					remoteAWSBackend);
-			CDMIConnection pdcStorageConn = new CDMIConnection("aaa","aaa",
-					pdcStorage);
+			Credentials creds = new UsernamePasswordCredentials("aaa", "aaa");
 
+			CDMIConnection localFileBackendConn = new CDMIConnection(creds,
+			localFileBackend);
+			CDMIConnection remoteAWSBackendConn = new CDMIConnection(creds,
+			remoteAWSBackend);
+			CDMIConnection pdcStorageConn = new CDMIConnection(creds,
+			pdcStorage);
+			
 			// upload some data for the demo
 			prepareData(localFileBackendConn, remoteAWSBackendConn, parameters);
 

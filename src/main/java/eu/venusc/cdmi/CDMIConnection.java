@@ -53,12 +53,11 @@ public class CDMIConnection {
 		this.nonCdmiContainerProxy = nonCdmiContainerProxy;
 	}
 
-	public CDMIConnection(String username, String passwd, URL endpoint)
+	public CDMIConnection(Credentials credentials, URL endpoint)
 			throws CertificateException, NoSuchAlgorithmException,
 			KeyManagementException, IOException, KeyStoreException,
 			UnrecoverableKeyException {
-		
-		credentials = new UsernamePasswordCredentials(username, passwd);
+
 		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 		// TODO: load server credentials
 		trustStore.load(null, null);
@@ -79,7 +78,8 @@ public class CDMIConnection {
 		// didn't result in
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory
 				.getSocketFactory(), endpoint.getPort()));
-		schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint.getPort()));
+		schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint
+				.getPort()));
 
 		ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
 				schemeRegistry);
@@ -103,7 +103,14 @@ public class CDMIConnection {
 				httpclient);
 		this.nonCdmiBlobProxy = new NonCDMIBlobOperations(endpoint, httpclient);
 	}
-	
+
+	public CDMIConnection(String username, String password, URL endpoint)
+			throws KeyManagementException, UnrecoverableKeyException,
+			CertificateException, NoSuchAlgorithmException, KeyStoreException,
+			IOException {
+		this(new UsernamePasswordCredentials(username, password), endpoint);
+	}
+
 	public DefaultHttpClient getHttpclient() {
 		return httpclient;
 	}
