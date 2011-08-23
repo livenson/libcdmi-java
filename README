@@ -21,6 +21,13 @@ your settings: libcdmi-java/src/test/java/eu/venusc/cdmi/CDMIConnectionWrapper.j
 
 	/* Add username and passwrd here: */
 	 ... = new CDMIConnection("username","passwd",cdmiServer);
+	
+	or 
+	/* credentials: your username/password */
+        credentials = new UsernamePasswordCredentials("username", "password");
+
+
+	
 
 Before isussing the following command make sure your vcdm server is up and running.
 	$ mvn install
