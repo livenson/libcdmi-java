@@ -1,5 +1,6 @@
 package eu.venusc.cdmi;
 
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -42,7 +43,8 @@ public class Utils {
      * @throws IOException
      */
     public static byte[] getBytesFromFile(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
+    	
+    	InputStream is = new FileInputStream(file);
 
         // Get the size of the file
         long length = file.length();

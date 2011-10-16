@@ -13,6 +13,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -51,6 +52,13 @@ public class CDMIConnection {
         this.nonCdmiContainerProxy = nonCdmiContainerProxy;
     }
 
+    public CDMIConnection(String username, String password, URL endpoint)
+            throws CertificateException, NoSuchAlgorithmException,
+            KeyManagementException, IOException, KeyStoreException,
+            UnrecoverableKeyException {
+        this(new UsernamePasswordCredentials(username, password), endpoint);
+    }
+
     public CDMIConnection(Credentials credentials, URL endpoint)
             throws CertificateException, NoSuchAlgorithmException,
             KeyManagementException, IOException, KeyStoreException,
@@ -76,7 +84,8 @@ public class CDMIConnection {
         // didn't result in
         schemeRegistry.register(new Scheme("http", PlainSocketFactory
                 .getSocketFactory(), endpoint.getPort()));
-        schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint.getPort()));
+        schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint
+                .getPort()));
 
         ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
                 schemeRegistry);
