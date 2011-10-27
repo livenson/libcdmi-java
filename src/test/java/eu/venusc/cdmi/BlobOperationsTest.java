@@ -33,7 +33,7 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
     static File tmpTextFile;
     static File tmpBinaryFile;
 
-    public BlobOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public BlobOperationsTest(String name) throws Exception {
         super(name);
         cops = cdmiConnection.getContainerProxy();
         bops = cdmiConnection.getBlobProxy();
@@ -56,7 +56,8 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
     }
 
     @After
-    public void tearDown() throws IOException, CDMIOperationException, URISyntaxException {
+    public void tearDown() throws IOException, CDMIOperationException,
+            URISyntaxException {
         for (String objectName : new String[] { textObjectName,
                 binaryObjectName }) {
             HttpResponse response = bops.delete(baseContainer + containerName
@@ -153,13 +154,13 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
         if (!mimeType.equals("text/plain")) {
             assertEquals("Local and remote blob objects are not equal: ",
-                    new String(Utils.getBytesFromFile(tmpTextFile)),
-                    Utils.getObjectContent(response));
+                    new String(Utils.getBytesFromFile(tmpTextFile)), Utils
+                            .getObjectContent(response));
 
         } else {
             assertEquals("Local and remote blob objects are not equal: ",
-                    new String(Utils.getBytesFromFile(tmpTextFile)),
-                    Utils.getTextContent(response));
+                    new String(Utils.getBytesFromFile(tmpTextFile)), Utils
+                            .getTextContent(response));
         }
     }
 
@@ -198,18 +199,19 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
 
         if (!mimeType.equals("text/plain")) {
             assertEquals("Local and remote blob objects are not equal: ",
-                    new String(Utils.getBytesFromFile(tmpBinaryFile)),
-                    Utils.getObjectContent(response));
+                    new String(Utils.getBytesFromFile(tmpBinaryFile)), Utils
+                            .getObjectContent(response));
 
         } else {
             assertEquals("Local and remote blob objects are not equal: ",
-                    new String(Utils.getBytesFromFile(tmpBinaryFile)),
-                    Utils.getTextContent(response));
+                    new String(Utils.getBytesFromFile(tmpBinaryFile)), Utils
+                            .getTextContent(response));
         }
     }
 
     @Test
-    public void testDelete() throws IOException, CDMIOperationException, URISyntaxException {
+    public void testDelete() throws IOException, CDMIOperationException,
+            URISyntaxException {
 
         HttpResponse response = cops.create(baseContainer + containerName,
                 parameters);

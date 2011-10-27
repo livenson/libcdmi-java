@@ -36,7 +36,7 @@ public class NonCDMIBlobOperationsTest extends CDMIConnectionWrapper {
     static File tmpTextFile;
     static File tmpBinaryFile;
 
-    public NonCDMIBlobOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public NonCDMIBlobOperationsTest(String name) throws Exception{
         super(name);
         cops = cdmiConnection.getNonCdmiContainerProxy();
         bops = cdmiConnection.getNonCdmiBlobProxy();

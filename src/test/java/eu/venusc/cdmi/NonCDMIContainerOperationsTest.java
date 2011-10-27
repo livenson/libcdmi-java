@@ -25,100 +25,100 @@ import org.junit.Test;
 
 public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper {
 
-	
-	NonCDMIContainerOperations cops;
-	static String containerName;
-	static String baseContainer;
-	static Random random = new Random();
 
-	public NonCDMIContainerOperationsTest(String name) throws KeyManagementException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-		super(name);
-		cops = cdmiConnection.getNonCdmiContainerProxy();
-	}
+    NonCDMIContainerOperations cops;
+    static String containerName;
+    static String baseContainer;
+    static Random random = new Random();
 
-	
-	@Before
-	public void setUp() throws Exception {
-		baseContainer = "/";
-		if (baseContainer.charAt(baseContainer.length()-1)!='/')
-			baseContainer = baseContainer + "/";
-		
-		containerName = "noncdmi-container" + random.nextInt();
-	}
-	@After
-	public void tearDown() throws IOException, ParseException,
-			CDMIOperationException, URISyntaxException {
+    public NonCDMIContainerOperationsTest(String name) throws Exception {
+        super(name);
+        cops = cdmiConnection.getNonCdmiContainerProxy();
+    }
 
-		String[] children = cops.getChildren(baseContainer);
 
-		for (int i = 0; i < children.length; i++) {
-			String url = baseContainer + children[i];
-			HttpResponse response = cops.delete(url);
-			int responseCode = response.getStatusLine().getStatusCode();
+    @Before
+    public void setUp() throws Exception {
+        baseContainer = "/";
+        if (baseContainer.charAt(baseContainer.length()-1)!='/')
+            baseContainer = baseContainer + "/";
 
-			if (responseCode == REQUEST_NOT_FOUND
-					|| responseCode == REQUEST_DELETED)
-				continue;
-			else
-				fail("Container " + url + " could not be cleaned up." + responseCode);
+        containerName = "noncdmi-container" + random.nextInt();
+    }
+    @After
+    public void tearDown() throws IOException, ParseException,
+            CDMIOperationException, URISyntaxException {
 
-		}
-	}
+        String[] children = cops.getChildren(baseContainer);
 
-	@Test
-	public void testCreate() throws ClientProtocolException, IOException,
-			CDMIOperationException, URISyntaxException {
-		HttpResponse response = cops.create(baseContainer + containerName,
-				parameters);
-		int responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Creating container failed: " + baseContainer + containerName
-				+ "/", REQUEST_CREATED, responseCode);
-	}
+        for (int i = 0; i < children.length; i++) {
+            String url = baseContainer + children[i];
+            HttpResponse response = cops.delete(url);
+            int responseCode = response.getStatusLine().getStatusCode();
 
-	@Test
-	public void testGetChildren() throws ClientProtocolException, IOException,
-			CDMIOperationException, ParseException, URISyntaxException {
+            if (responseCode == REQUEST_NOT_FOUND
+                    || responseCode == REQUEST_DELETED)
+                continue;
+            else
+                fail("Container " + url + " could not be cleaned up." + responseCode);
 
-		Set<String> newContainers = new HashSet<String>();
+        }
+    }
 
-		// create containers
-		for (int i = 0; i < 3; i++) {
-			String container_name = containerName + "_" + i;
-			HttpResponse response = cops.create(baseContainer + container_name, parameters);
-			int responseCode = response.getStatusLine().getStatusCode();
+    @Test
+    public void testCreate() throws ClientProtocolException, IOException,
+            CDMIOperationException, URISyntaxException {
+        HttpResponse response = cops.create(baseContainer + containerName,
+                parameters);
+        int responseCode = response.getStatusLine().getStatusCode();
+        assertEquals("Creating container failed: " + baseContainer + containerName
+                + "/", REQUEST_CREATED, responseCode);
+    }
 
-			if (responseCode != REQUEST_CREATED)
-				fail("Could not create  the container: " + baseContainer + container_name);
-			newContainers.add(container_name + "/");
-		}
+    @Test
+    public void testGetChildren() throws ClientProtocolException, IOException,
+            CDMIOperationException, ParseException, URISyntaxException {
 
-		String[] children = cops.getChildren(baseContainer);
+        Set<String> newContainers = new HashSet<String>();
 
-		Set<String> childSet = new HashSet<String>();
-		for (int i = 0; i < children.length; i++) {
-			childSet.add(children[i]);
-		}
-		
-		assertTrue("Checking created container children failed: ", childSet.containsAll(newContainers));
-		childSet.clear();
+        // create containers
+        for (int i = 0; i < 3; i++) {
+            String container_name = containerName + "_" + i;
+            HttpResponse response = cops.create(baseContainer + container_name, parameters);
+            int responseCode = response.getStatusLine().getStatusCode();
 
-	}
+            if (responseCode != REQUEST_CREATED)
+                fail("Could not create  the container: " + baseContainer + container_name);
+            newContainers.add(container_name + "/");
+        }
 
-	@Test
-	public void testDelete() throws ClientProtocolException, IOException,
-			CDMIOperationException, URISyntaxException {
+        String[] children = cops.getChildren(baseContainer);
 
-		// Create a container
-		HttpResponse response = cops.create(baseContainer + containerName, parameters);
-		int responseCode = response.getStatusLine().getStatusCode();
+        Set<String> childSet = new HashSet<String>();
+        for (int i = 0; i < children.length; i++) {
+            childSet.add(children[i]);
+        }
 
-		if (responseCode != REQUEST_CREATED)
-			fail("Could not create the container: " + baseContainer
-					+ containerName);
-		// delete the container
-		response = cops.delete(baseContainer + containerName);
-		responseCode = response.getStatusLine().getStatusCode();
-		assertEquals("Container could not be deleted: " + baseContainer + containerName,
-				REQUEST_DELETED, responseCode);
-	}
+        assertTrue("Checking created container children failed: ", childSet.containsAll(newContainers));
+        childSet.clear();
+
+    }
+
+    @Test
+    public void testDelete() throws ClientProtocolException, IOException,
+            CDMIOperationException, URISyntaxException {
+
+        // Create a container
+        HttpResponse response = cops.create(baseContainer + containerName, parameters);
+        int responseCode = response.getStatusLine().getStatusCode();
+
+        if (responseCode != REQUEST_CREATED)
+            fail("Could not create the container: " + baseContainer
+                    + containerName);
+        // delete the container
+        response = cops.delete(baseContainer + containerName);
+        responseCode = response.getStatusLine().getStatusCode();
+        assertEquals("Container could not be deleted: " + baseContainer + containerName,
+                REQUEST_DELETED, responseCode);
+    }
 }
