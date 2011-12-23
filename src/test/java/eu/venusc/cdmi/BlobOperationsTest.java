@@ -7,11 +7,6 @@ import static eu.venusc.cdmi.CDMIResponseStatus.REQUEST_NOT_FOUND;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;

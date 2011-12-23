@@ -22,9 +22,9 @@ public abstract class CDMIConnectionWrapper extends TestCase {
     }
 
     protected void createConnection() throws Exception {
-        cdmiServer = new URL("http://localhost:2364/");
+        cdmiServer = new URL("http://localhost:2365/");
         parameters = new HashMap<String, Object>();
-        credentials = new UsernamePasswordCredentials("christian", "venusc");
+        credentials = new UsernamePasswordCredentials("aaa", "aaa");
         cdmiConnection = new CDMIConnection(credentials, cdmiServer);
     }
 
