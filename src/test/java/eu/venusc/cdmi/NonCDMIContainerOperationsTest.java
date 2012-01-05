@@ -44,7 +44,7 @@ public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper {
     public void tearDown() throws IOException, ParseException,
             CDMIOperationException, URISyntaxException {
 
-        String[] children = cops.getChildren(baseContainer);
+        String[] children = cops.getChildren(baseContainer, false);
 
         for (int i = 0; i < children.length; i++) {
             String url = baseContainer + children[i];
