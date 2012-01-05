@@ -3,6 +3,7 @@ package eu.venusc.cdmi;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,13 @@ public class NonCDMIContainerOperations {
 		return httpclient.execute(httpdelete);
 	}
 
-	public String[] getChildren(String remoteContainer)
+	public String[] getChildrenDecoded(String remoteContainer) throws 
+			ClientProtocolException, IOException, CDMIOperationException, 
+			ParseException, URISyntaxException {
+		return getChildren(remoteContainer, true);
+	}
+	
+	public String[] getChildren(String remoteContainer, boolean decode)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException, URISyntaxException {
 
@@ -60,6 +67,13 @@ public class NonCDMIContainerOperations {
 		// TODO: better conversion to String[]?
 		List<Object> elements = Utils
 				.getElementCollection(response, "children");
+		if (decode) {
+			String[] decodedResult = new String[elements.size()];
+			for (int i = 0; i < elements.size(); i++) {
+				decodedResult[i] = URLDecoder.decode((String) elements.get(i), "UTF-8");
+			}
+			return decodedResult;
+		}
 		return (String[]) elements.toArray(new String[elements.size()]);
 	}
 
