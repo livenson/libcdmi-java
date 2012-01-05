@@ -73,11 +73,6 @@
 
   <repositories>
     <repository>
-      <id>m1.dev.java.net</id>
-      <url>http://download.java.net/maven/1</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
       <id>m2.dev.java.net</id>
       <url>http://download.java.net/maven/2</url>
       <layout>default</layout>
