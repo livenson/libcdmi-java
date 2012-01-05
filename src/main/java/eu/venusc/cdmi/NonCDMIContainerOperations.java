@@ -51,7 +51,7 @@ public class NonCDMIContainerOperations {
 		return httpclient.execute(httpdelete);
 	}
 
-	public String[] getChildrenDecoded(String remoteContainer) throws 
+	public String[] getChildren(String remoteContainer) throws 
 			ClientProtocolException, IOException, CDMIOperationException, 
 			ParseException, URISyntaxException {
 		return getChildren(remoteContainer, true);
