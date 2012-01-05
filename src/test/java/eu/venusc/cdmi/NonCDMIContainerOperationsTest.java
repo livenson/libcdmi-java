@@ -87,7 +87,7 @@ public class NonCDMIContainerOperationsTest extends CDMIConnectionWrapper {
             newContainers.add(container_name + "/");
         }
 
-        String[] children = cops.getChildren(baseContainer);
+        String[] children = cops.getChildren(baseContainer, false);
 
         Set<String> childSet = new HashSet<String>();
         for (int i = 0; i < children.length; i++) {
