@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.FileEntity;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.parser.ParseException;
 
 public class NonCDMIBlobOperations{
@@ -85,6 +86,7 @@ public class NonCDMIBlobOperations{
         FileOutputStream outputFile = new FileOutputStream(localFileName);
         response.getEntity().writeTo(outputFile);
         outputFile.close();
+        EntityUtils.consume(response.getEntity());
         return responseCode;
     }
 }
