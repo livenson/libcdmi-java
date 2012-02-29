@@ -65,8 +65,7 @@ public class NonCDMIContainerOperations {
 		fields.add("children");
 		HttpResponse response = read(remoteContainer, fields);
 		// TODO: better conversion to String[]?
-		List<Object> elements = Utils
-				.getElementCollection(response, "children");
+		List<Object> elements = Utils.getElementCollection(response, "children");
 		if (decode) {
 			String[] decodedResult = new String[elements.size()];
 			for (int i = 0; i < elements.size(); i++) {
