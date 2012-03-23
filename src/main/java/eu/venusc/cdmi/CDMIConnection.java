@@ -1,6 +1,8 @@
 package eu.venusc.cdmi;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -63,14 +65,27 @@ public class CDMIConnection {
             throws CertificateException, NoSuchAlgorithmException,
             KeyManagementException, IOException, KeyStoreException,
             UnrecoverableKeyException {
+        this(credentials, endpoint, null, null);
+    }
 
-        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        // TODO: load server credentials
-        trustStore.load(null, null);
+    public CDMIConnection(Credentials credentials, URL endpoint,
+            InputStream keystoreInputStream, String keystorePassword)
+            throws CertificateException, NoSuchAlgorithmException,
+            KeyManagementException, IOException, KeyStoreException,
+            UnrecoverableKeyException {
 
-        SSLSocketFactory blindTrustFactory = new CustomSSLSocketFactory(
-                trustStore);
-        blindTrustFactory
+        SSLSocketFactory myTrustFactory;
+
+        if (keystoreInputStream != null) {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            keyStore.load(keystoreInputStream, keystorePassword.toCharArray());
+
+            myTrustFactory = new CustomSSLSocketFactory(keyStore,
+                    keystorePassword);
+        } else
+            myTrustFactory = SSLSocketFactory.getSocketFactory();
+
+        myTrustFactory
                 .setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
         HttpParams params = new BasicHttpParams();
@@ -79,21 +94,20 @@ public class CDMIConnection {
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         // XXX: very wierd - using deprecated constructor for Scheme it works. A
-        // suggested option
-        // - with factory and default port interchanged - fails. 10min debugging
-        // didn't result in
+        // suggested option - with factory and
+        // default port interchanged - fails.
         schemeRegistry.register(new Scheme("http", PlainSocketFactory
                 .getSocketFactory(), endpoint.getPort()));
-        schemeRegistry.register(new Scheme("https", blindTrustFactory, endpoint
+        schemeRegistry.register(new Scheme("https", myTrustFactory, endpoint
                 .getPort()));
 
         ThreadSafeClientConnManager conMg = new ThreadSafeClientConnManager(
                 schemeRegistry);
-        conMg.setMaxTotal(200);
-        conMg.setDefaultMaxPerRoute(10);
+        conMg.setMaxTotal(300);
+        conMg.setDefaultMaxPerRoute(30);
 
         HttpHost host = new HttpHost(endpoint.getHost(), 80);
-        conMg.setMaxForRoute(new HttpRoute(host), 20);
+        conMg.setMaxForRoute(new HttpRoute(host), 50);
 
         httpclient = new DefaultHttpClient(conMg);
 
