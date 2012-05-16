@@ -35,6 +35,9 @@ public class ContainerOperations {
 			Map<String, Object> parameters) throws ClientProtocolException,
 			IOException, CDMIOperationException, URISyntaxException {
 
+	    if (!remoteContainer.endsWith("/"))
+	        remoteContainer += "/";
+
 		HttpPut httpput = new HttpPut(Utils.getURI(endpoint, remoteContainer, true));
 		httpput.setHeader("Content-Type", CDMI_CONTAINER);
 		httpput.setHeader("Accept", CDMI_CONTAINER);
@@ -51,6 +54,8 @@ public class ContainerOperations {
 
 	public HttpResponse delete(String remoteContainer)
 			throws ClientProtocolException, IOException, CDMIOperationException, URISyntaxException {
+        if (!remoteContainer.endsWith("/"))
+            remoteContainer += "/";
 
 		HttpDelete httpdelete = new HttpDelete(Utils.getURI(endpoint, remoteContainer, true));
 		httpdelete.setHeader("X-CDMI-Specification-Version", CDMI_SPEC_VERSION);
@@ -60,7 +65,10 @@ public class ContainerOperations {
 
 	public HttpResponse read(String remoteContainer, List<String> fields)
 			throws ClientProtocolException, IOException, URISyntaxException {
-		String path = remoteContainer + "/?";
+       if (!remoteContainer.endsWith("/"))
+            remoteContainer += "/";
+
+		String path = remoteContainer + "?";
 
 		for (String f : fields) {
 			path = path + f;
@@ -75,6 +83,8 @@ public class ContainerOperations {
 	public String[] getChildren(String remoteContainer)
 			throws ClientProtocolException, IOException,
 			CDMIOperationException, ParseException, URISyntaxException {
+        if (!remoteContainer.endsWith("/"))
+            remoteContainer += "/";
 
 		List<String> fields = new ArrayList<String>();
 		fields.add("children");
