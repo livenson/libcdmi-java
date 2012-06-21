@@ -56,21 +56,17 @@ public class ContainerOperationsTest extends CDMIConnectionWrapper {
             else
                 fail("Container " + url + " could not be cleaned up."
                         + responseCode);
-
         }
-
     }
 
     @Test
     public void testCreate() throws ClientProtocolException, IOException,
             CDMIOperationException, URISyntaxException {
-
         HttpResponse response = cops.create(baseContainer + containerName,
                 parameters);
         int responseCode = response.getStatusLine().getStatusCode();
         assertEquals("Creating container failed:" + baseContainer
                 + containerName + "/", REQUEST_CREATED, responseCode);
-
     }
 
     @Test
