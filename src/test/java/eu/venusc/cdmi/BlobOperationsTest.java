@@ -148,12 +148,12 @@ public class BlobOperationsTest extends CDMIConnectionWrapper {
         responseCode = response.getStatusLine().getStatusCode();
 
         if (!mimeType.equals("text/plain")) {
-            assertEquals("Local and remote blob objects are not equal: ",
+            assertEquals("(mime=text/plain) Local and remote blob objects are not equal: ",
                     new String(Utils.getBytesFromFile(tmpTextFile)), Utils
                             .getObjectContent(response));
 
         } else {
-            assertEquals("Local and remote blob objects are not equal: ",
+            assertEquals("(mime!=text/plain) Local and remote blob objects are not equal: ",
                     new String(Utils.getBytesFromFile(tmpTextFile)), Utils
                             .getTextContent(response));
         }
