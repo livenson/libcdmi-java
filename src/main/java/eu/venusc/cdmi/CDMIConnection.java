@@ -8,6 +8,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
@@ -57,14 +58,14 @@ public class CDMIConnection {
     public CDMIConnection(String username, String password, URL endpoint)
             throws CertificateException, NoSuchAlgorithmException,
             KeyManagementException, IOException, KeyStoreException,
-            UnrecoverableKeyException {
+            UnrecoverableKeyException, NoSuchProviderException {
         this(new UsernamePasswordCredentials(username, password), endpoint);
     }
 
     public CDMIConnection(Credentials credentials, URL endpoint)
             throws CertificateException, NoSuchAlgorithmException,
             KeyManagementException, IOException, KeyStoreException,
-            UnrecoverableKeyException {
+            UnrecoverableKeyException, NoSuchProviderException {
         this(credentials, endpoint, null, null);
     }
 
@@ -72,8 +73,7 @@ public class CDMIConnection {
             InputStream keystoreInputStream, String keystorePassword)
             throws CertificateException, NoSuchAlgorithmException,
             KeyManagementException, IOException, KeyStoreException,
-            UnrecoverableKeyException {
-
+            UnrecoverableKeyException, NoSuchProviderException {
         SSLSocketFactory myTrustFactory;
 
         if (keystoreInputStream != null) {
@@ -83,7 +83,7 @@ public class CDMIConnection {
             myTrustFactory = new CustomSSLSocketFactory(keyStore,
                     keystorePassword);
         } else
-            myTrustFactory = SSLSocketFactory.getSocketFactory();
+            myTrustFactory = CustomSSLSocketFactory.getNaiveSocketFactory();
 
         myTrustFactory
                 .setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
