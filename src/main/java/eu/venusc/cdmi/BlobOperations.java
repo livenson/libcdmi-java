@@ -103,13 +103,8 @@ public class BlobOperations{
             throw new CDMIOperationException("Download failed : "
                     + remoteFileName, responseCode);
 
-        String mimeType = (String) Utils.getElement(response, "mimetype");
         FileOutputStream outputFile = new FileOutputStream(localFileName);
-        if (mimeType.equals("text/plain")) {
-            outputFile.write(Utils.getObjectContent(response).getBytes());
-        } else {
-            outputFile.write(Utils.getTextContent(response).getBytes());
-        }
+        outputFile.write(Utils.getContent(response).getBytes());
         outputFile.close();
 
         return responseCode;

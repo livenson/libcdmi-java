@@ -81,7 +81,7 @@ public class Utils {
         return bytes;
     }
 
-    public static String getContent(String file) throws IOException {
+    public static String getContentFromAFile(String file) throws IOException {
 
         FileReader fileReader = new FileReader(file);
         BufferedReader in = new BufferedReader(fileReader);
@@ -91,7 +91,6 @@ public class Utils {
             content.append(str);
         }
         return content.toString();
-
     }
 
     public static List getElementCollection(HttpResponse response,
@@ -139,19 +138,12 @@ public class Utils {
         stream.close();
         is.close();
         return content;
-
     }
 
     /**
-     * To extract a binary CDMI object contents. The binary files are decoded as
-     * JSON BASE64 rules.
-     *
-     * @param response
-     * @return
-     * @throws IOException
-     * @throws ParseException
+     * Extract value of a CDMI object. The binary files are decoded according to JSON BASE64 rules.
      */
-    public static String getObjectContent(HttpResponse response)
+    public static String getContent(HttpResponse response)
             throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         InputStream stream = response.getEntity().getContent();
@@ -171,37 +163,30 @@ public class Utils {
             }
         };
         Map jsonMap = (Map) parser.parse(is, containerFactory);
-
+        String mimetype = jsonMap.get("mimetype").toString();
         String content = jsonMap.get("value").toString();
-        byte[] decodedObj = Base64.decodeBase64(content);
-        stream.close();
-        is.close();
-        return new String(decodedObj);
-    }
-
-    public static String getTextContent(HttpResponse response)
-            throws IOException, ParseException {
-
-        JSONParser parser = new JSONParser();
-        InputStream stream = response.getEntity().getContent();
-        InputStreamReader is = new InputStreamReader(stream);
-
-        ContainerFactory containerFactory = new ContainerFactory() {
-            public List creatArrayContainer() {
-                return new LinkedList();
-            }
-
-            public Map createObjectContainer() {
-                return new LinkedHashMap();
-            }
-        };
-
-        Map jsonMap = (Map) parser.parse(is, containerFactory);
-        String content = jsonMap.get("value").toString();
+        if (!mimetype.equals("text/plain")) {
+            byte[] decodedObj = Base64.decodeBase64(content);
+            content = new String(decodedObj);
+        }
         stream.close();
         is.close();
         return content;
+    }
 
+    /**
+     * @deprecated Use getContent instead.
+     */
+    public static String getTextContent(HttpResponse response)
+            throws IOException, ParseException {
+        return getContent(response);
+    }
+
+    /**
+     * @deprecated Use getContent instead.
+     */
+    public static String getObjectContent(HttpResponse response) throws IOException, ParseException {
+        return getContent(response);
     }
 
     public static File createTemporaryFile(String content, String prefix, String suffix)
